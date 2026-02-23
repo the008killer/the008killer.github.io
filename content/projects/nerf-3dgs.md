@@ -15,4 +15,4 @@ A research project comparing Neural Radiance Fields (NeRF) and 3D Gaussian Splat
 - Gaussian Splatting
 
 ## Links
-- [Live Demo](https://gui.giriamrit.com.np/)
+- [Live Demo](https://ominions.vercel.app/)

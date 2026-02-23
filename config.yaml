@@ -98,8 +98,8 @@ params:
     #   - name: Resume
     #     url: ""
     buttons:
-      - name: Writeups
-        url: writeups
+      - name: Recent
+        url: "#recents"
       - name: Archives
         url: archives
       - name: Resume

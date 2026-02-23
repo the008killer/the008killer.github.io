@@ -2,6 +2,61 @@
 
 {{- if (and site.Params.profileMode.enabled .IsHome) }}
 {{- partial "index_profile.html" . }}
+
+{{- $recentWriteups := first 3 ((where site.RegularPages "Type" "writeups").ByDate.Reverse) }}
+{{- $recentProjects := first 3 ((where site.RegularPages "Type" "projects").ByDate.Reverse) }}
+{{- $recentBlogs := first 3 ((where site.RegularPages "Type" "in" (slice "blogs" "blog" "posts" "post")).ByDate.Reverse) }}
+
+<section id="recents" class="page-header">
+  <h2>Recent</h2>
+  <hr>
+</section>
+{{- if gt (len $recentWriteups) 0 }}
+{{- range $recentWriteups }}
+<article class="post-entry">
+  <header class="entry-header">
+    <h2>{{ .Title }}</h2>
+  </header>
+  <div class="entry-content">
+    <p>{{ .Description | default "Read the full writeup." }}</p>
+  </div>
+  <footer class="entry-footer">
+    {{- partial "post_meta.html" . -}}
+  </footer>
+  <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
+</article>
+{{- end }}
+{{- else }}
+<p>No writeups published yet.</p>
+{{- end }}
+
+<!-- <section class="page-header">
+  <h2>Recent Projects</h2>
+</section>
+{{- if gt (len $recentProjects) 0 }}
+{{- range $recentProjects }}
+<article class="post-entry">
+  <header class="entry-header">
+    <h2>{{ .Title }}</h2>
+  </header>
+  <div class="entry-content">
+    <p>{{ .Description | default "Explore this project." }}</p>
+  </div>
+  <footer class="entry-footer">
+    {{- partial "post_meta.html" . -}}
+  </footer>
+  <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
+</article>
+{{- end }}
+{{- else }}
+<p>No projects published yet.</p>
+{{- end }} -->
+
+
+
+
+
+
 {{- else }} {{/* if not profileMode */}}
 
 {{- if not .IsHome | and .Title }}
