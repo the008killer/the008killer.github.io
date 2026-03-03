@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>EHAX CTF 2026 | the008Ki11er</title>
+<meta name="keywords" content="">
+<meta name="description" content="EHAX CTF was organized from Sat, 28 Feb. 2026 to Sun, 1 March. 2026. I participated with my team Blue Lock Eleven, got 104 rank overall. In this ctf I was able to solve few forensics challenges here is the complete writeup of them.">
+<meta name="author" content="">
+<link rel="canonical" href="http://localhost:1313/writeups/ctfs/ehaxctf/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.f0aeecef0c6bef020a9d5f83f42698478ee2a6e72d20fa4a1c2514cd7de8a85c.css" integrity="sha256-8K7s7wxr7wIKnV&#43;D9CaYR47ipuctIPpKHCUUzX3oqFw=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/writeups/ctfs/ehaxctf/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><meta property="og:url" content="http://localhost:1313/writeups/ctfs/ehaxctf/">
+  <meta property="og:site_name" content="the008Ki11er">
+  <meta property="og:title" content="EHAX CTF 2026">
+  <meta property="og:description" content="EHAX CTF was organized from Sat, 28 Feb. 2026 to Sun, 1 March. 2026. I participated with my team Blue Lock Eleven, got 104 rank overall. In this ctf I was able to solve few forensics challenges here is the complete writeup of them.">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="writeups">
+      <meta property="og:image" content="http://localhost:1313/papermod-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://localhost:1313/papermod-cover.png">
+<meta name="twitter:title" content="EHAX CTF 2026">
+<meta name="twitter:description" content="EHAX CTF was organized from Sat, 28 Feb. 2026 to Sun, 1 March. 2026. I participated with my team Blue Lock Eleven, got 104 rank overall. In this ctf I was able to solve few forensics challenges here is the complete writeup of them.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Writeups",
+      "item": "http://localhost:1313/writeups/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "CTF",
+      "item": "http://localhost:1313/writeups/ctfs/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "EHAX CTF 2026",
+      "item": "http://localhost:1313/writeups/ctfs/ehaxctf/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "EHAX CTF 2026",
+  "name": "EHAX CTF 2026",
+  "description": "EHAX CTF was organized from Sat, 28 Feb. 2026 to Sun, 1 March. 2026. I participated with my team Blue Lock Eleven, got 104 rank overall. In this ctf I was able to solve few forensics challenges here is the complete writeup of them.",
+  "keywords": [
+    
+  ],
+  "articleBody": "let-the-penguin-live Analysis Exiftool ExifTool Version Number : 13.36 File Name : challenge.mkv Directory : . File Size : 8.1 MB File Modification Date/Time : 2026:02:27 13:38:54-05:00 File Access Date/Time : 2026:03:03 04:20:50-05:00 File Inode Change Date/Time : 2026:02:27 14:09:14-05:00 File Permissions : -rw-rw-r-- File Type : MKV File Type Extension : mkv MIME Type : video/x-matroska EBML Version : 1 EBML Read Version : 1 Doc Type : matroska Doc Type Version : 4 Doc Type Read Version : 2 Timecode Scale : 1 ms Title : Penguin Codec ID : A_FLAC Track Type : Audio Audio Channels : 2 Compatible Brands : isomiso2avc1mp41 Comment : EH4X{k33p_try1ng} we have a Comment EH4X{k33p_try1ng} and 2 audio channels.\nConfirming with ffprobe Stream #0:0: Video Stream #0:1: Audio 1 default audio Stream #0:2: Audio 2 hidden audio Decoding audio As the description says: Silence the crowd to hear the individual. we have two audios in the track Track = crowd + individual. we have to remove crowd audio.\nIn sound wave if two waves are of opposite phase then phase cancellation occurs.\n0:a:0 -\u003e is a Stereo -\u003e contains Crowd noise + some audio 0:a:1 -\u003e is 5.1 Surround -\u003e contains Crowd noise + hidden message So if we invert the phase of crowd noise in stereo, will cancel crowd noise in surround audio leaving the hidden message\nffmpeg -i challenge.mkv -filter_complex \"[0:a:0]volume=-1[a];[0:a:1][a]amix\" output.wav [0:a:0]volume=-1[a]: Inverts the phase of the stereo audio track [0:a:1][a]amix: Mixes the inverted stereo track with the 5.1 surround track Result: Identical audio (crowd noise) cancels out, leaving only the unique audio (hidden message) Obtain flag flag:\nEH4X{0n3_tr4ck_m1nd_tw0_tr4k_f1les} Baby serial The challenge involves analyzing a Saleae logic analyzer capture (.sal file) to determine if Joe successfully sniffed serial communication. First I analysed the sal file in this site: Sal Converter Here meta.json provides configuration details (e.g., sample rate, channel count). The digital.bin files are likely raw data chunks referenced by the .sal file.\nUsing Salae Logic Download the salae logic software first: here\nSteps to Follow:\nOpen the babyserial.sal file in salae logic software We see pulses on channel 0, this is raw UART data Decode the serial data On right bar we see Analysers button Click on Analysers and add Async Serial analyser Choose channel 0 and keep other settings unchanged We can see Data section on right side there is grid view and terminal view click on terminal view copy the data Paste the data in cyberchef decode using From Base64 then we see png header Add render image and get flag Painter We are given a .pcap file which contained USB HID (Human Interface Device) Traffic capture data. The flag was “drawn” using a mouse or a drawing tablet.\nAnalysis The source 3.15.1 tells us the traffic comes from Bus 3, Device 15, Endpoint 1. We need to extract the “Leftover Capture Data” from these specific packets.\ntshark -r pref.pcap -Y \"usb.device_address == 15 \u0026\u0026 usb.bus_id == 3 \u0026\u0026 usb.capdata\" -T fields -e usb.capdata \u003e data.txt contents of data.txt\n01000000fdff00 01000000faff00 0100fffff5ff00 0100fefff3ff00 0100fdfff2ff00 0100fcfff0ff00 0100fbffedff00 0100fcffeeff00 0100faffeeff00 0100fbffeeff00 0100fafff0ff00 0100fafff1ff00 0100f9fff2ff00 0100fafff2ff00 0100fafff3ff00 0100f8fff1ff00 0100fbfff2ff00 0100fafff2ff00 0100f9fff1ff00 0100f8ffeeff00 0100f8ffefff00 0100f8ffefff00 0100f9ffefff00 0100fafff2ff00 0100fcfff5ff00 0100fcfff7ff00 0100fefff9ff00 Reconstruct the drawing Standard mouse packet is 4 bytes: data[0] = buttons, data[1] = x, data[2] = y\nimport matplotlib.pyplot as plt import struct x, y = 0, 0 path_x, path_y = [], [] with open('data.txt', 'r') as f: for line in f: data = bytes.fromhex(line.strip()) if len(data) \u003e= 6: button = data[0] dx = struct.unpack('",
+  "wordCount" : "623",
+  "inLanguage": "en",
+  "image": "http://localhost:1313/papermod-cover.png","datePublished": "0001-01-01T00:00:00Z",
+  "dateModified": "0001-01-01T00:00:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://localhost:1313/writeups/ctfs/ehaxctf/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "the008Ki11er",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://localhost:1313/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+<body id="top">
+    
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header sticky-header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/" accesskey="h" title="the008Ki11er (Alt + H)">the008Ki11er</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+                <ul class="lang-switch"><li>|</li>
+                </ul>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/writeups" title="Writeups">
+                    <span>Writeups</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/projects" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/experience" title="Experience">
+                    <span>Experience</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/search" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/tags" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://localhost:1313/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/writeups/">Writeups</a>&nbsp;»&nbsp;<a href="http://localhost:1313/writeups/ctfs/">CTF</a></div>
+    <h1 class="post-title entry-hint-parent">
+      EHAX CTF 2026
+    </h1>
+    <div class="post-description">
+      EHAX CTF was organized from Sat, 28 Feb. 2026 to Sun, 1 March. 2026. I participated with my team Blue Lock Eleven, got 104 rank overall. In this ctf I was able to solve few forensics challenges here is the complete writeup of them.
+    </div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">‎ Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#let-the-penguin-live" aria-label="let-the-penguin-live">let-the-penguin-live</a><ul>
+                        
+                <li>
+                    <a href="#analysis" aria-label="Analysis">Analysis</a></li>
+                <li>
+                    <a href="#decoding-audio" aria-label="Decoding audio">Decoding audio</a></li>
+                <li>
+                    <a href="#obtain-flag" aria-label="Obtain flag">Obtain flag</a></li></ul>
+                </li>
+                <li>
+                    <a href="#baby-serial" aria-label="Baby serial">Baby serial</a><ul>
+                        
+                <li>
+                    <a href="#using-salae-logic" aria-label="Using Salae Logic">Using Salae Logic</a></li></ul>
+                </li>
+                <li>
+                    <a href="#painter" aria-label="Painter">Painter</a><ul>
+                        
+                <li>
+                    <a href="#analysis-1" aria-label="Analysis">Analysis</a></li>
+                <li>
+                    <a href="#reconstruct-the-drawing" aria-label="Reconstruct the drawing">Reconstruct the drawing</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h2 id="let-the-penguin-live">let-the-penguin-live<a hidden class="anchor" aria-hidden="true" href="#let-the-penguin-live">#</a></h2>
+<p><img alt="penguin" loading="lazy" src="/writeups/ctfs/ehaxctf/assets/penguin.png"></p>
+<h3 id="analysis">Analysis<a hidden class="anchor" aria-hidden="true" href="#analysis">#</a></h3>
+<ul>
+<li>Exiftool</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ExifTool Version Number         : 13.36
+</span></span><span class="line"><span class="cl">File Name                       : challenge.mkv
+</span></span><span class="line"><span class="cl">Directory                       : .
+</span></span><span class="line"><span class="cl">File Size                       : 8.1 MB
+</span></span><span class="line"><span class="cl">File Modification Date/Time     : 2026:02:27 13:38:54-05:00
+</span></span><span class="line"><span class="cl">File Access Date/Time           : 2026:03:03 04:20:50-05:00
+</span></span><span class="line"><span class="cl">File Inode Change Date/Time     : 2026:02:27 14:09:14-05:00
+</span></span><span class="line"><span class="cl">File Permissions                : -rw-rw-r--
+</span></span><span class="line"><span class="cl">File Type                       : MKV
+</span></span><span class="line"><span class="cl">File Type Extension             : mkv
+</span></span><span class="line"><span class="cl">MIME Type                       : video/x-matroska
+</span></span><span class="line"><span class="cl">EBML Version                    : <span class="m">1</span>
+</span></span><span class="line"><span class="cl">EBML Read Version               : <span class="m">1</span>
+</span></span><span class="line"><span class="cl">Doc Type                        : matroska
+</span></span><span class="line"><span class="cl">Doc Type Version                : <span class="m">4</span>
+</span></span><span class="line"><span class="cl">Doc Type Read Version           : <span class="m">2</span>
+</span></span><span class="line"><span class="cl">Timecode Scale                  : <span class="m">1</span> ms
+</span></span><span class="line"><span class="cl">Title                           : Penguin
+</span></span><span class="line"><span class="cl">                &lt;SNIP&gt;
+</span></span><span class="line"><span class="cl">Codec ID                        : A_FLAC
+</span></span><span class="line"><span class="cl">Track Type                      : Audio
+</span></span><span class="line"><span class="cl">Audio Channels                  : <span class="m">2</span>
+</span></span><span class="line"><span class="cl">                &lt;SNIP&gt;
+</span></span><span class="line"><span class="cl">Compatible Brands               : isomiso2avc1mp41
+</span></span><span class="line"><span class="cl">Comment                         : EH4X<span class="o">{</span>k33p_try1ng<span class="o">}</span>
+</span></span><span class="line"><span class="cl">                &lt;SNIP&gt;
+</span></span></code></pre></div><p>we have a Comment <code>EH4X{k33p_try1ng}</code> and 2 audio channels.</p>
+<ul>
+<li>
+<p>Confirming with <code>ffprobe</code>
+<img alt="audios" loading="lazy" src="/writeups/ctfs/ehaxctf/assets/penguin_audios.png"></p>
+<ul>
+<li><code>Stream #0:0</code>: Video</li>
+<li><code>Stream #0:1</code>: Audio 1 default audio</li>
+<li><code>Stream #0:2</code>: Audio 2 hidden audio</li>
+</ul>
+</li>
+</ul>
+<h3 id="decoding-audio">Decoding audio<a hidden class="anchor" aria-hidden="true" href="#decoding-audio">#</a></h3>
+<p>As the description says: <strong><em>Silence the crowd to hear the individual.</em></strong> we have two audios in the track <code>Track = crowd + individual</code>. we have to remove <code>crowd audio</code>.<br>
+In sound wave if two waves are of opposite phase then phase cancellation occurs.<br></p>
+<ul>
+<li><code>0:a:0</code> -&gt; is a Stereo -&gt; contains Crowd noise + some audio</li>
+<li><code>0:a:1</code> -&gt; is 5.1 Surround -&gt; contains Crowd noise + hidden message</li>
+</ul>
+<p>So if we invert the phase of crowd noise in stereo, will cancel crowd noise in surround audio leaving the hidden message</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ffmpeg -i challenge.mkv -filter_complex <span class="s2">&#34;[0:a:0]volume=-1[a];[0:a:1][a]amix&#34;</span> output.wav
+</span></span></code></pre></div><ul>
+<li><code>[0:a:0]volume=-1[a]</code>: Inverts the phase of the stereo audio track</li>
+<li><code>[0:a:1][a]amix</code>: Mixes the inverted stereo track with the 5.1 surround track</li>
+<li>Result: Identical audio (crowd noise) cancels out, leaving only the unique audio (hidden message)</li>
+</ul>
+<h3 id="obtain-flag">Obtain flag<a hidden class="anchor" aria-hidden="true" href="#obtain-flag">#</a></h3>
+<p><img alt="flag" loading="lazy" src="/writeups/ctfs/ehaxctf/assets/penguin_flag.png"></p>
+<p>flag:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">EH4X{0n3_tr4ck_m1nd_tw0_tr4k_f1les}
+</span></span></code></pre></div><hr>
+<h2 id="baby-serial">Baby serial<a hidden class="anchor" aria-hidden="true" href="#baby-serial">#</a></h2>
+<p><img alt="babyserial" loading="lazy" src="/writeups/ctfs/ehaxctf/assets/babyserial.png"></p>
+<p>The challenge involves analyzing a Saleae logic analyzer capture (<code>.sal</code> file) to determine if Joe successfully sniffed serial communication. First I analysed the <code>sal</code> file in this site: <a href="https://convert.guru/sal-converter">Sal Converter</a>
+<img alt="Contents" loading="lazy" src="/writeups/ctfs/ehaxctf/assets/babyserial_contents.png"></p>
+<p>Here <code>meta.json</code> provides configuration details (e.g., sample rate, channel count). The <code>digital.bin</code> files are likely raw data chunks referenced by the <code>.sal</code> file.</p>
+<h3 id="using-salae-logic">Using Salae Logic<a hidden class="anchor" aria-hidden="true" href="#using-salae-logic">#</a></h3>
+<p>Download the salae logic software first: <a href="https://www.saleae.com/downloads/">here</a></p>
+<p><strong>Steps to Follow:</strong></p>
+<ul>
+<li>Open the <code>babyserial.sal</code> file in salae logic software</li>
+<li>We see pulses on channel 0, this is raw UART data
+<img alt="Pulses" loading="lazy" src="/writeups/ctfs/ehaxctf/assets/babyserial_chan0.png"></li>
+<li>Decode the serial data
+<img alt="Settings" loading="lazy" src="/writeups/ctfs/ehaxctf/assets/babyserial_logic.png">
+<ul>
+<li>On right bar we see Analysers button</li>
+<li>Click on Analysers and add <code>Async Serial</code> analyser</li>
+<li>Choose channel 0 and keep other settings unchanged</li>
+</ul>
+</li>
+<li>We can see <code>Data</code> section on right side
+<img alt="data" loading="lazy" src="/writeups/ctfs/ehaxctf/assets/babyserial_data.png">
+<ul>
+<li>there is grid view and terminal view click on terminal view</li>
+<li>copy the data</li>
+</ul>
+</li>
+<li>Paste the data in cyberchef decode using <code>From Base64</code> then we see png header
+<img alt="cyberchef" loading="lazy" src="/writeups/ctfs/ehaxctf/assets/babyserial_cyberchef.png"></li>
+<li>Add render image and get flag
+<img alt="flag" loading="lazy" src="/writeups/ctfs/ehaxctf/assets/babyserial_flag.png"></li>
+</ul>
+<hr>
+<h2 id="painter">Painter<a hidden class="anchor" aria-hidden="true" href="#painter">#</a></h2>
+<p><img alt="Painter" loading="lazy" src="/writeups/ctfs/ehaxctf/assets/painter.png"></p>
+<p>We are given a <code>.pcap</code> file which contained USB HID (Human Interface Device) Traffic capture data. The flag was &ldquo;drawn&rdquo; using a mouse or a drawing tablet.</p>
+<h3 id="analysis-1">Analysis<a hidden class="anchor" aria-hidden="true" href="#analysis-1">#</a></h3>
+<p><img alt="pcap" loading="lazy" src="/writeups/ctfs/ehaxctf/assets/painter_pcap.png">
+The source <code>3.15.1</code> tells us the traffic comes from <strong>Bus 3, Device 15, Endpoint 1</strong>. We need to extract the &ldquo;<code>Leftover Capture Data</code>&rdquo; from these specific packets.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">tshark -r pref.pcap -Y <span class="s2">&#34;usb.device_address == 15 &amp;&amp; usb.bus_id == 3 &amp;&amp; usb.capdata&#34;</span> -T fields -e usb.capdata &gt; data.txt
+</span></span></code></pre></div><p>contents of data.txt</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">01000000fdff00
+</span></span><span class="line"><span class="cl">01000000faff00
+</span></span><span class="line"><span class="cl">0100fffff5ff00
+</span></span><span class="line"><span class="cl">0100fefff3ff00
+</span></span><span class="line"><span class="cl">0100fdfff2ff00
+</span></span><span class="line"><span class="cl">0100fcfff0ff00
+</span></span><span class="line"><span class="cl">0100fbffedff00
+</span></span><span class="line"><span class="cl">0100fcffeeff00
+</span></span><span class="line"><span class="cl">0100faffeeff00
+</span></span><span class="line"><span class="cl">0100fbffeeff00
+</span></span><span class="line"><span class="cl">0100fafff0ff00
+</span></span><span class="line"><span class="cl">0100fafff1ff00
+</span></span><span class="line"><span class="cl">0100f9fff2ff00
+</span></span><span class="line"><span class="cl">0100fafff2ff00
+</span></span><span class="line"><span class="cl">0100fafff3ff00
+</span></span><span class="line"><span class="cl">0100f8fff1ff00
+</span></span><span class="line"><span class="cl">0100fbfff2ff00
+</span></span><span class="line"><span class="cl">0100fafff2ff00
+</span></span><span class="line"><span class="cl">0100f9fff1ff00
+</span></span><span class="line"><span class="cl">0100f8ffeeff00
+</span></span><span class="line"><span class="cl">0100f8ffefff00
+</span></span><span class="line"><span class="cl">0100f8ffefff00
+</span></span><span class="line"><span class="cl">0100f9ffefff00
+</span></span><span class="line"><span class="cl">0100fafff2ff00
+</span></span><span class="line"><span class="cl">0100fcfff5ff00
+</span></span><span class="line"><span class="cl">0100fcfff7ff00
+</span></span><span class="line"><span class="cl">0100fefff9ff00
+</span></span><span class="line"><span class="cl">&lt;SNIP&gt;
+</span></span></code></pre></div><h3 id="reconstruct-the-drawing">Reconstruct the drawing<a hidden class="anchor" aria-hidden="true" href="#reconstruct-the-drawing">#</a></h3>
+<p>Standard mouse packet is 4 bytes: <code>data[0] = buttons, data[1] = x, data[2] = y</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">struct</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl"><span class="n">path_x</span><span class="p">,</span> <span class="n">path_y</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">data</span> <span class="o">=</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">            
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">6</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">button</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">            <span class="n">dx</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;&lt;h&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">            <span class="n">dy</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;&lt;h&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">6</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">                
+</span></span><span class="line"><span class="cl">            <span class="n">x</span> <span class="o">+=</span> <span class="n">dx</span>
+</span></span><span class="line"><span class="cl">            <span class="n">y</span> <span class="o">-=</span> <span class="n">dy</span> 
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="n">button</span> <span class="o">==</span> <span class="mh">0x01</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">path_x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">path_y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">path_x</span><span class="p">,</span> <span class="n">path_y</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</span></span></code></pre></div><p>This produced following image:
+<img alt="flag" loading="lazy" src="/writeups/ctfs/ehaxctf/assets/painter_flag.png"></p>
+<p>the text was:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">wh4t_c0l0ur_15_th3_fl4g
+</span></span></code></pre></div><hr>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+<nav class="paginav">
+  <a class="next" href="http://localhost:1313/writeups/ctfs/lactf2026/">
+    <span class="title">Next »</span>
+    <br>
+    <span>LACTF CTF 2026</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2026 <a href="http://localhost:1313/">the008Ki11er</a></span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
