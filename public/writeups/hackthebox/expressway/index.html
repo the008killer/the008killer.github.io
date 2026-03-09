@@ -77,9 +77,9 @@
   <meta property="og:locale" content="en-us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="writeups">
-    <meta property="og:image" content="http://localhost:1313/writeups/hackthebox/expressway/images/cover.png">
+    <meta property="og:image" content="http://localhost:1313/writeups/hackthebox/expressway/writeups/HacktheBox/expressway-cover.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://localhost:1313/writeups/hackthebox/expressway/images/cover.png">
+<meta name="twitter:image" content="http://localhost:1313/writeups/hackthebox/expressway/writeups/HacktheBox/expressway-cover.png">
 <meta name="twitter:title" content="HTB-Expressway">
 <meta name="twitter:description" content="Expressway is an easy linux machine released on 20 Sep 2025 by darkmaddy.">
 
@@ -123,7 +123,7 @@
   "articleBody": "🛠 Overview Category\rInfo\rMachine NameExpressway\rDifficultyEasy\rRelease Date20 Sep 2025\rAuthordakkmaddy\rOSLinux\rPwned Date21 Sep 2025\r1. Reconnaissance Initial reconnaissance was performed using RustScan to quickly identify open TCP ports on the target 10.10.11.87. RustScan results:\nOpen ports discovered: - 22/tcp (SSH) Observations from RustScan Host responded to ICMP echo requests (TTL=63). Only SSH was open over TCP. File descriptor limits were noted to be low, suggesting potential speed issues in large scans. A follow-up UDP scan revealed:\n500/udp open isakmp - XAUTH enabled - Dead Peer Detection (DPD) v1.0 This indicated an active VPN/IKE service running on UDP port 500.\n2. IKE Enumeration Since the host had IKE/XAUTH enabled, an IKE scan was performed using ike-scan:\nsudo ike-scan --aggressive --pskcrack=ike.psk 10.10.11.87 Results:\nHost returned an aggressive mode handshake: Encryption: 3DES Hash: SHA1 Group: 2/modp1024 Auth: PSK (XAUTH) KeyExchange: 128 bytes Nonce: 32 bytes ID: ike@expressway.htb Analysis:\nThe PSK-based authentication allowed offline password cracking using --pskcrack. The PSK file was saved as ike.psk and successfully cracked, allowing SSH access. 3. User Access SSH into the user account using the cracked credentials:\nssh ike@expressway.htb Once inside, enumeration was performed to identify privilege escalation vectors.\n4. Privilege Escalation 4.1. SUID Binaries Enumeration Search for SUID binaries:\nfind / -perm -4000 -type f 2\u003e/dev/null The /usr/local/bin/sudo binary was checked for version:\nsudo --version Finding:\nVersion was vulnerable to CVE-2025-32463. 4.2. CVE-2025-32463 Analysis Source: Stratascale CRU Description: Sudo improperly loads NSS shared objects when performing chroot operations. An unprivileged user can trick Sudo into loading an arbitrary shared object, resulting in arbitrary code execution as root.\nImpact: Local Privilege Escalation (root shell) possible. 4.3. Exploit Execution A Proof-of-Concept exploit sudo-chwoot.sh was used:\nSteps performed by the script: Creates a temporary working directory. Compiles a malicious shared library that runs /bin/bash as root. Configures a fake nsswitch.conf to load the malicious library. Executes sudo -R woot woot to trigger the vulnerability. Cleans up temporary files. Result:\nA root shell was obtained on the target machine. 5. Conclusion Summary of Exploitation Path Step Action Outcome Recon RustScan TCP/UDP scan Found SSH (22/tcp) and IKE (500/udp) Enumeration IKE scan + PSK crack Obtained user ike credentials Access SSH login as ike User shell obtained Privilege Escalation SUID enumeration /usr/local/bin/sudo identified as exploitable Exploitation CVE-2025-32463 PoC Root shell obtained Key Takeaways: The combination of IKE PSK enumeration and sudo NSS library vulnerability allowed full compromise. Understanding NSS shared object loading is critical for identifying this type of local privilege escalation. Proper patching of Sudo and restricting user access to /usr/local/bin/sudo can mitigate this vector. 6. References RustScan: https://github.com/RustScan/RustScan ike-scan: http://www.nta-monitor.com/tools/ike-scan/ CVE-2025-32463 advisory: Stratascale Write-up prepared by: the008killer\n",
   "wordCount" : "440",
   "inLanguage": "en",
-  "image":"http://localhost:1313/writeups/hackthebox/expressway/images/cover.png","datePublished": "0001-01-01T00:00:00Z",
+  "image":"http://localhost:1313/writeups/hackthebox/expressway/writeups/HacktheBox/expressway-cover.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -229,14 +229,53 @@
     </div>
   </header> 
 <figure class="entry-cover">
-            <img loading="eager"
-                srcset='http://localhost:1313/writeups/hackthebox/expressway/images/cover_hu_671b82b96a2b6cc4.png 360w,http://localhost:1313/writeups/hackthebox/expressway/images/cover_hu_4fcc39327eb197c4.png 480w,http://localhost:1313/writeups/hackthebox/expressway/images/cover_hu_1d2ecfa27117cc1d.png 720w,http://localhost:1313/writeups/hackthebox/expressway/images/cover_hu_8feb1385f5942d8e.png 1080w,http://localhost:1313/writeups/hackthebox/expressway/images/cover.png 1305w'
-                src="http://localhost:1313/writeups/hackthebox/expressway/images/cover.png"
-                sizes="(min-width: 768px) 720px, 100vw"
-                width="1305" height="1112"
-                alt="HTB Expressway cover image">
+        <img loading="eager" src="http://localhost:1313/writeups/HacktheBox/expressway-cover.png" alt="HTB Expressway cover image">
         
-</figure>
+</figure><div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">‎ Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#-overview" aria-label="🛠 Overview">🛠 Overview</a></li>
+                <li>
+                    <a href="#1-reconnaissance" aria-label="1. Reconnaissance">1. Reconnaissance</a><ul>
+                        
+                <li>
+                    <a href="#observations-from-rustscan" aria-label="Observations from RustScan">Observations from RustScan</a></li></ul>
+                </li>
+                <li>
+                    <a href="#2-ike-enumeration" aria-label="2. IKE Enumeration">2. IKE Enumeration</a></li>
+                <li>
+                    <a href="#3-user-access" aria-label="3. User Access">3. User Access</a></li>
+                <li>
+                    <a href="#4-privilege-escalation" aria-label="4. Privilege Escalation">4. Privilege Escalation</a><ul>
+                        
+                <li>
+                    <a href="#41-suid-binaries-enumeration" aria-label="4.1. SUID Binaries Enumeration">4.1. SUID Binaries Enumeration</a></li>
+                <li>
+                    <a href="#42-cve-2025-32463-analysis" aria-label="4.2. CVE-2025-32463 Analysis">4.2. CVE-2025-32463 Analysis</a></li>
+                <li>
+                    <a href="#43-exploit-execution" aria-label="4.3. Exploit Execution">4.3. Exploit Execution</a></li></ul>
+                </li>
+                <li>
+                    <a href="#5-conclusion" aria-label="5. Conclusion">5. Conclusion</a><ul>
+                        
+                <li>
+                    <a href="#summary-of-exploitation-path" aria-label="Summary of Exploitation Path">Summary of Exploitation Path</a></li>
+                <li>
+                    <a href="#key-takeaways" aria-label="Key Takeaways:">Key Takeaways:</a></li></ul>
+                </li>
+                <li>
+                    <a href="#6-references" aria-label="6. References">6. References</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
   <div class="post-content"><h2 id="-overview">🛠 Overview<a hidden class="anchor" aria-hidden="true" href="#-overview">#</a></h2>
 <table style="width:100%; table-layout:fixed;">
   <thead>
