@@ -21,6 +21,13 @@
       <description>EHAX CTF was organized from Sat, 28 Feb. 2026 to Sun, 1 March. 2026. I participated with my team Blue Lock Eleven, got 104 rank overall. In this ctf I was able to solve few forensics challenges here is the complete writeup of them.</description>
     </item>
     <item>
+      <title>HTB-Expressway</title>
+      <link>http://localhost:1313/writeups/hackthebox/expressway/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/writeups/hackthebox/expressway/</guid>
+      <description>Expressway is an easy linux machine released on 20 Sep 2025 by darkmaddy.</description>
+    </item>
+    <item>
       <title>LACTF CTF 2026</title>
       <link>http://localhost:1313/writeups/ctfs/lactf2026/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>

@@ -12,5 +12,12 @@
     <generator>Hugo -- 0.155.2</generator>
     <language>en-us</language>
     <atom:link href="http://localhost:1313/writeups/hackthebox/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HTB-Expressway</title>
+      <link>http://localhost:1313/writeups/hackthebox/expressway/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/writeups/hackthebox/expressway/</guid>
+      <description>Expressway is an easy linux machine</description>
+    </item>
   </channel>
 </rss>
