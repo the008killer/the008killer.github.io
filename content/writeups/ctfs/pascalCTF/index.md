@@ -1,5 +1,6 @@
 ---
 title: Pascal CTF
+date: 2026-02-03
 description: PascalCTF is a cybersecurity event organized by high school students to attract other students to the world of CTFs. The categories included
  Miscellaneous, 
  Cryptography, 

@@ -77,6 +77,8 @@
   <meta property="og:locale" content="en-us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="writeups">
+    <meta property="article:published_time" content="2026-03-09T00:00:00+00:00">
+    <meta property="article:modified_time" content="2026-03-09T00:00:00+00:00">
     <meta property="og:image" content="http://localhost:1313/writeups/hackthebox/expressway/writeups/HacktheBox/expressway-cover.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://localhost:1313/writeups/hackthebox/expressway/writeups/HacktheBox/expressway-cover.png">
@@ -123,8 +125,8 @@
   "articleBody": "🛠 Overview Category\rInfo\rMachine NameExpressway\rDifficultyEasy\rRelease Date20 Sep 2025\rAuthordakkmaddy\rOSLinux\rPwned Date21 Sep 2025\r1. Reconnaissance Initial reconnaissance was performed using RustScan to quickly identify open TCP ports on the target 10.10.11.87. RustScan results:\nOpen ports discovered: - 22/tcp (SSH) Observations from RustScan Host responded to ICMP echo requests (TTL=63). Only SSH was open over TCP. File descriptor limits were noted to be low, suggesting potential speed issues in large scans. A follow-up UDP scan revealed:\n500/udp open isakmp - XAUTH enabled - Dead Peer Detection (DPD) v1.0 This indicated an active VPN/IKE service running on UDP port 500.\n2. IKE Enumeration Since the host had IKE/XAUTH enabled, an IKE scan was performed using ike-scan:\nsudo ike-scan --aggressive --pskcrack=ike.psk 10.10.11.87 Results:\nHost returned an aggressive mode handshake: Encryption: 3DES Hash: SHA1 Group: 2/modp1024 Auth: PSK (XAUTH) KeyExchange: 128 bytes Nonce: 32 bytes ID: ike@expressway.htb Analysis:\nThe PSK-based authentication allowed offline password cracking using --pskcrack. The PSK file was saved as ike.psk and successfully cracked, allowing SSH access. 3. User Access SSH into the user account using the cracked credentials:\nssh ike@expressway.htb Once inside, enumeration was performed to identify privilege escalation vectors.\n4. Privilege Escalation 4.1. SUID Binaries Enumeration Search for SUID binaries:\nfind / -perm -4000 -type f 2\u003e/dev/null The /usr/local/bin/sudo binary was checked for version:\nsudo --version Finding:\nVersion was vulnerable to CVE-2025-32463. 4.2. CVE-2025-32463 Analysis Source: Stratascale CRU Description: Sudo improperly loads NSS shared objects when performing chroot operations. An unprivileged user can trick Sudo into loading an arbitrary shared object, resulting in arbitrary code execution as root.\nImpact: Local Privilege Escalation (root shell) possible. 4.3. Exploit Execution A Proof-of-Concept exploit sudo-chwoot.sh was used:\nSteps performed by the script: Creates a temporary working directory. Compiles a malicious shared library that runs /bin/bash as root. Configures a fake nsswitch.conf to load the malicious library. Executes sudo -R woot woot to trigger the vulnerability. Cleans up temporary files. Result:\nA root shell was obtained on the target machine. 5. Conclusion Summary of Exploitation Path Step Action Outcome Recon RustScan TCP/UDP scan Found SSH (22/tcp) and IKE (500/udp) Enumeration IKE scan + PSK crack Obtained user ike credentials Access SSH login as ike User shell obtained Privilege Escalation SUID enumeration /usr/local/bin/sudo identified as exploitable Exploitation CVE-2025-32463 PoC Root shell obtained Key Takeaways: The combination of IKE PSK enumeration and sudo NSS library vulnerability allowed full compromise. Understanding NSS shared object loading is critical for identifying this type of local privilege escalation. Proper patching of Sudo and restricting user access to /usr/local/bin/sudo can mitigate this vector. 6. References RustScan: https://github.com/RustScan/RustScan ike-scan: http://www.nta-monitor.com/tools/ike-scan/ CVE-2025-32463 advisory: Stratascale Write-up prepared by: the008killer\n",
   "wordCount" : "440",
   "inLanguage": "en",
-  "image":"http://localhost:1313/writeups/hackthebox/expressway/writeups/HacktheBox/expressway-cover.png","datePublished": "0001-01-01T00:00:00Z",
-  "dateModified": "0001-01-01T00:00:00Z",
+  "image":"http://localhost:1313/writeups/hackthebox/expressway/writeups/HacktheBox/expressway-cover.png","datePublished": "2026-03-09T00:00:00Z",
+  "dateModified": "2026-03-09T00:00:00Z",
   "mainEntityOfPage": {
     "@type": "WebPage",
     "@id": "http://localhost:1313/writeups/hackthebox/expressway/"
@@ -440,15 +442,15 @@
     <ul class="post-tags">
     </ul>
 <nav class="paginav">
-  <a class="prev" href="http://localhost:1313/writeups/ctfs/ehaxctf/">
+  <a class="prev" href="http://localhost:1313/writeups/hackthebox/conversor/">
     <span class="title">« Prev</span>
     <br>
-    <span>EHAX CTF 2026</span>
+    <span>HTB-Conversor</span>
   </a>
-  <a class="next" href="http://localhost:1313/writeups/ctfs/lactf2026/">
+  <a class="next" href="http://localhost:1313/writeups/ctfs/ehaxctf/">
     <span class="title">Next »</span>
     <br>
-    <span>LACTF CTF 2026</span>
+    <span>EHAX CTF 2026</span>
   </a>
 </nav>
 

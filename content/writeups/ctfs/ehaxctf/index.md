@@ -1,5 +1,6 @@
 ---
 title: EHAX CTF 2026
+date: 2026-03-03
 description: EHAX CTF was organized from Sat, 28 Feb. 2026 to Sun, 1 March. 2026. I participated with my team Blue Lock Eleven, got 104 rank overall. In this ctf I was able to solve few forensics challenges here is the complete writeup of them. 
 
 keyword: ehax, ehaxctf, forensics

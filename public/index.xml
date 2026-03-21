@@ -11,33 +11,40 @@
     </image>
     <generator>Hugo -- 0.155.2</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 04 Jan 2024 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 21 Mar 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>EHAX CTF 2026</title>
-      <link>http://localhost:1313/writeups/ctfs/ehaxctf/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/writeups/ctfs/ehaxctf/</guid>
-      <description>EHAX CTF was organized from Sat, 28 Feb. 2026 to Sun, 1 March. 2026. I participated with my team Blue Lock Eleven, got 104 rank overall. In this ctf I was able to solve few forensics challenges here is the complete writeup of them.</description>
+      <title>HTB-Conversor</title>
+      <link>http://localhost:1313/writeups/hackthebox/conversor/</link>
+      <pubDate>Sat, 21 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/writeups/hackthebox/conversor/</guid>
+      <description>Conversor is an easy Linux machine featuring a web application that converts XML documents into visually formatted HTML documents using XSLT stylesheets. The application processes user-supplied XSLT files without proper sanitisation, leading to an XSLT injection vulnerability. . For privilege escalation, the machine highlights execution of needrestart a vulnerable executable with sudo privileges.</description>
     </item>
     <item>
       <title>HTB-Expressway</title>
       <link>http://localhost:1313/writeups/hackthebox/expressway/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 09 Mar 2026 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/writeups/hackthebox/expressway/</guid>
       <description>Expressway is an easy linux machine released on 20 Sep 2025 by darkmaddy.</description>
     </item>
     <item>
+      <title>EHAX CTF 2026</title>
+      <link>http://localhost:1313/writeups/ctfs/ehaxctf/</link>
+      <pubDate>Tue, 03 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/writeups/ctfs/ehaxctf/</guid>
+      <description>EHAX CTF was organized from Sat, 28 Feb. 2026 to Sun, 1 March. 2026. I participated with my team Blue Lock Eleven, got 104 rank overall. In this ctf I was able to solve few forensics challenges here is the complete writeup of them.</description>
+    </item>
+    <item>
       <title>LACTF CTF 2026</title>
       <link>http://localhost:1313/writeups/ctfs/lactf2026/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 11 Feb 2026 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/writeups/ctfs/lactf2026/</guid>
       <description>LA CTF was organized from Sat, 07 Feb. 2026 to Mon, 09 Feb. 2026, featuring challenges from different categories like Cryptography, Miscelleaneous, Reverse Engineering, Pwn and Web Exploitation. I participated with my team Blue Lock Eleven, got 133/955 rank overall.</description>
     </item>
     <item>
       <title>Pascal CTF</title>
       <link>http://localhost:1313/writeups/ctfs/pascalctf/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 03 Feb 2026 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/writeups/ctfs/pascalctf/</guid>
       <description>PascalCTF is a cybersecurity event organized by high school students to attract other students to the world of CTFs. The categories included Miscellaneous, Cryptography, Web Security, Reverse Engineering, Artificial Intelligence and Binary Exploitation</description>
     </item>

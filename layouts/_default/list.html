@@ -3,9 +3,9 @@
 {{- if (and site.Params.profileMode.enabled .IsHome) }}
 {{- partial "index_profile.html" . }}
 
-{{- $recentWriteups := first 3 ((where site.RegularPages "Type" "writeups").ByDate) }}
+{{- $recentWriteups := first 3 ((where site.RegularPages "Type" "writeups").ByDate.Reverse) }}
 {{- $recentProjects := first 3 ((where site.RegularPages "Type" "projects").ByDate) }}
-{{- $recentBlogs := first 3 ((where site.RegularPages "Type" "in" (slice "blogs" "blog" "posts" "post")).ByDate) }}
+{{- $recentBlogs := first 3 ((where site.RegularPages "Type" "in" (slice "blogs" "blog" "posts" "post")).ByDate.Reverse) }}
 
 <section id="recents" class="page-header">
   <h2>Recent</h2>
