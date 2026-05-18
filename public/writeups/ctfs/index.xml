@@ -11,25 +11,26 @@
     </image>
     <generator>Hugo -- 0.155.2</generator>
     <language>en-us</language>
+    <lastBuildDate>Tue, 03 Mar 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/writeups/ctfs/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>EHAX CTF 2026</title>
       <link>http://localhost:1313/writeups/ctfs/ehaxctf/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 03 Mar 2026 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/writeups/ctfs/ehaxctf/</guid>
       <description>EHAX CTF was organized from Sat, 28 Feb. 2026 to Sun, 1 March. 2026. I participated with my team Blue Lock Eleven, got 104 rank overall. In this ctf I was able to solve few forensics challenges here is the complete writeup of them.</description>
     </item>
     <item>
       <title>LACTF CTF 2026</title>
       <link>http://localhost:1313/writeups/ctfs/lactf2026/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 11 Feb 2026 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/writeups/ctfs/lactf2026/</guid>
       <description>LA CTF was organized from Sat, 07 Feb. 2026 to Mon, 09 Feb. 2026, featuring challenges from different categories like Cryptography, Miscelleaneous, Reverse Engineering, Pwn and Web Exploitation. I participated with my team Blue Lock Eleven, got 133/955 rank overall.</description>
     </item>
     <item>
       <title>Pascal CTF</title>
       <link>http://localhost:1313/writeups/ctfs/pascalctf/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 03 Feb 2026 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/writeups/ctfs/pascalctf/</guid>
       <description>PascalCTF is a cybersecurity event organized by high school students to attract other students to the world of CTFs. The categories included Miscellaneous, Cryptography, Web Security, Reverse Engineering, Artificial Intelligence and Binary Exploitation</description>
     </item>
