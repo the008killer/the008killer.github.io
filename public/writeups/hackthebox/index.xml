@@ -11,7 +11,7 @@
     </image>
     <generator>Hugo -- 0.155.2</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 21 Mar 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 30 May 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/writeups/hackthebox/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>HTB-Conversor</title>
@@ -21,18 +21,25 @@
       <description>Conversor is an easy Linux machine featuring a web application that converts XML documents into visually formatted HTML documents using XSLT stylesheets. The application processes user-supplied XSLT files without proper sanitisation, leading to an XSLT injection vulnerability. . For privilege escalation, the machine highlights execution of needrestart a vulnerable executable with sudo privileges.</description>
     </item>
     <item>
+      <title>HTB-Interpreter</title>
+      <link>http://localhost:1313/writeups/hackthebox/interpreter/</link>
+      <pubDate>Sat, 30 May 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/writeups/hackthebox/interpreter/</guid>
+      <description>This machine involves exploiting a known vulnerability in MirthConnect 4.4.0 to gain an initial foothold, cracking a PBKDF2-HMAC-SHA256 hash to escalate to a real user, and finally abusing an insecure `eval()` call in a locally running Flask service to read the root flag.</description>
+    </item>
+    <item>
+      <title>HTB-Pterodactyl</title>
+      <link>http://localhost:1313/writeups/hackthebox/pterodactyl/</link>
+      <pubDate>Mon, 18 May 2026 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/writeups/hackthebox/pterodactyl/</guid>
+      <description>Pterodactyl is a medium linux machine released on 7 Feb 2026 by Headmonitor and TheCyberGeek. This machine runs Pterodactyl Panel which is vulnerable to  CVE-2025-49132, an unauthenticated RCE which leads us to user. And for privilege escalation chaining CVE-2025-6018 and CVE-2025-6019, by forging XDG_SEAT and XDG_VTNR environment variables in .pam_environment user can gain active polkit rights.</description>
+    </item>
+    <item>
       <title>HTB-Expressway</title>
       <link>http://localhost:1313/writeups/hackthebox/expressway/</link>
       <pubDate>Mon, 09 Mar 2026 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/writeups/hackthebox/expressway/</guid>
       <description>Expressway is an easy linux machine released on 20 Sep 2025 by darkmaddy.</description>
-    </item>
-    <item>
-      <title>HTB-Pterodactyl</title>
-      <link>http://localhost:1313/writeups/hackthebox/pterodactyl/</link>
-      <pubDate>Mon, 09 Mar 2026 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/writeups/hackthebox/pterodactyl/</guid>
-      <description>Pterodactyl is a medium linux machine released on 7 Feb 2026 by Headmonitor and TheCyberGeek. This machine runs Pterodactyl Panel which is vulnerable to  CVE-2025-49132, an unauthenticated RCE which leads us to user. And for privilege escalation chaining CVE-2025-6018 and CVE-2025-6019, by forging XDG_SEAT and XDG_VTNR environment variables in .pam_environment user can gain active polkit rights.</description>
     </item>
   </channel>
 </rss>

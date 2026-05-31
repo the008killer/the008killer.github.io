@@ -208,17 +208,17 @@
 
 <article class="post-entry"> 
 <figure class="entry-cover">
-        <img loading="lazy" src="http://localhost:1313/writeups/HacktheBox/expressway-cover.png" alt="HTB Expressway cover image">
+        <img loading="lazy" src="http://localhost:1313/writeups/HacktheBox/interpreter-cover.png" alt="HTB Interpreter cover image">
 </figure>
   <header class="entry-header">
-    <h2>HTB-Expressway
+    <h2>HTB-Interpreter
     </h2>
   </header>
   
   <div class="entry-content">
-    <p>Expressway is an easy linux machine released on 20 Sep 2025 by darkmaddy.</p>
+    <p>This machine involves exploiting a known vulnerability in MirthConnect 4.4.0 to gain an initial foothold, cracking a PBKDF2-HMAC-SHA256 hash to escalate to a real user, and finally abusing an insecure `eval()` call in a locally running Flask service to read the root flag.</p>
   </div>
-  <a class="entry-link" aria-label="post link to HTB-Expressway" href="http://localhost:1313/writeups/hackthebox/expressway/"></a>
+  <a class="entry-link" aria-label="post link to HTB-Interpreter" href="http://localhost:1313/writeups/hackthebox/interpreter/"></a>
 </article>
 
 <article class="post-entry"> 
@@ -234,6 +234,21 @@
     <p>Pterodactyl is a medium linux machine released on 7 Feb 2026 by Headmonitor and TheCyberGeek. This machine runs Pterodactyl Panel which is vulnerable to  CVE-2025-49132, an unauthenticated RCE which leads us to user. And for privilege escalation chaining CVE-2025-6018 and CVE-2025-6019, by forging XDG_SEAT and XDG_VTNR environment variables in .pam_environment user can gain active polkit rights.</p>
   </div>
   <a class="entry-link" aria-label="post link to HTB-Pterodactyl" href="http://localhost:1313/writeups/hackthebox/pterodactyl/"></a>
+</article>
+
+<article class="post-entry"> 
+<figure class="entry-cover">
+        <img loading="lazy" src="http://localhost:1313/writeups/HacktheBox/expressway-cover.png" alt="HTB Expressway cover image">
+</figure>
+  <header class="entry-header">
+    <h2>HTB-Expressway
+    </h2>
+  </header>
+  
+  <div class="entry-content">
+    <p>Expressway is an easy linux machine released on 20 Sep 2025 by darkmaddy.</p>
+  </div>
+  <a class="entry-link" aria-label="post link to HTB-Expressway" href="http://localhost:1313/writeups/hackthebox/expressway/"></a>
 </article>
     </main>
     
