@@ -8,6 +8,7 @@ description: PascalCTF is a cybersecurity event organized by high school student
  Reverse Engineering, 
  Artificial Intelligence and 
  Binary Exploitation
+tags: ['pascalCTF','web','forensics']
 weight: 2
 showToc: true
 hidemeta: true

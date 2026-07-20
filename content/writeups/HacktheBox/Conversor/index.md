@@ -2,7 +2,7 @@
 title: "HTB-Conversor"
 description: Conversor is an easy Linux machine featuring a web application that converts XML documents into visually formatted HTML documents using XSLT stylesheets. The application processes user-supplied XSLT files without proper sanitisation, leading to an XSLT injection vulnerability. . For privilege escalation, the machine highlights execution of needrestart a vulnerable executable with sudo privileges.
 
-keyword: HTB, linux, XLST Injection
+tags: ['HTB', 'linux', 'XLST Injection']
 weight: 1
 date: 2026-03-21
 showToc: true

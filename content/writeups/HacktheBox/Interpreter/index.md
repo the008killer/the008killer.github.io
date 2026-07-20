@@ -3,7 +3,7 @@ title: "HTB-Interpreter"
 date: 2026-05-30
 description: This machine involves exploiting a known vulnerability in MirthConnect 4.4.0 to gain an initial foothold, cracking a PBKDF2-HMAC-SHA256 hash to escalate to a real user, and finally abusing an insecure `eval()` call in a locally running Flask service to read the root flag.
 
-keyword: HTB, linux, MirthConnect, CVE-2023-43208, PBKDF2 hash, PBKDF2-HMAC-SHA256, eval injection 
+tags: ['HTB', 'linux', 'MirthConnect', 'CVE-2023-43208', 'PBKDF2 hash', 'PBKDF2-HMAC-SHA256', 'eval injection'] 
 weight: 2
 showToc: true
 hidemeta: true

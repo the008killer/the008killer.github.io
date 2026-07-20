@@ -3,7 +3,7 @@ title: "HTB-Expressway"
 date: 2026-03-09
 description: Expressway is an easy linux machine released on 20 Sep 2025 by darkmaddy. 
 
-keyword: HTB, linux, CVE-2025-32463
+tags: ['HTB', 'linux', 'CVE-2025-32463']
 weight: 2
 showToc: true
 hidemeta: true

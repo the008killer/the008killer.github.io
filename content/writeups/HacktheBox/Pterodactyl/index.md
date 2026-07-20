@@ -3,7 +3,7 @@ title: "HTB-Pterodactyl"
 date: 2026-05-18
 description: Pterodactyl is a medium linux machine released on 7 Feb 2026 by Headmonitor and TheCyberGeek. This machine runs Pterodactyl Panel which is vulnerable to  CVE-2025-49132, an unauthenticated RCE which leads us to user. And for privilege escalation chaining CVE-2025-6018 and CVE-2025-6019, by forging XDG_SEAT and XDG_VTNR environment variables in .pam_environment user can gain active polkit rights.
 
-keyword: HTB, linux,  CVE-2025-49132, CVE-2025-6018, CVE-2025-6019, udisks, LPE chains
+tags: ['HTB', 'linux',  'CVE-2025-49132', 'CVE-2025-6018', 'CVE-2025-6019', 'udisks', 'LPE chains']
 weight: 2
 showToc: true
 hidemeta: true

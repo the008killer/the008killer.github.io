@@ -2,7 +2,7 @@
 title: LACTF CTF 2026
 date: 2026-02-11
 description: LA CTF was organized from Sat, 07 Feb. 2026 to Mon, 09 Feb. 2026, featuring challenges from different categories like Cryptography, Miscelleaneous, Reverse Engineering, Pwn and Web Exploitation. I participated with my team Blue Lock Eleven, got 133/955 rank overall.
-keyword: lactf, lactf2026
+tags: ['lactf', 'lactf2026']
 weight: 2
 showToc: true
 hidemeta: true
