@@ -1,45 +1,49 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Projects on the008Ki11er</title>
+    <title>Projects on the008Killer</title>
     <link>http://localhost:1313/projects/</link>
-    <description>Recent content in Projects on the008Ki11er</description>
-    <image>
-      <title>the008Ki11er</title>
-      <url>http://localhost:1313/papermod-cover.png</url>
-      <link>http://localhost:1313/papermod-cover.png</link>
-    </image>
-    <generator>Hugo -- 0.155.2</generator>
+    <description>Recent content in Projects on the008Killer</description>
+    <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 04 Jan 2024 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/projects/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <lastBuildDate>Thu, 04 Jan 2024 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/projects/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>SMS Based Vehicle Tracking</title>
       <link>http://localhost:1313/projects/sms-vehicle-tracking/</link>
       <pubDate>Wed, 03 Jan 2024 00:00:00 +0000</pubDate>
+      
       <guid>http://localhost:1313/projects/sms-vehicle-tracking/</guid>
       <description>A vehicle tracking system that uses SMS for real-time location updates and monitoring</description>
     </item>
+    
     <item>
       <title>Cryptopals Challenges</title>
       <link>http://localhost:1313/projects/cryptopals/</link>
       <pubDate>Thu, 04 Jan 2024 00:00:00 +0000</pubDate>
+      
       <guid>http://localhost:1313/projects/cryptopals/</guid>
       <description>A collection of cryptography challenges designed to teach the fundamentals of cryptography through practical exercises</description>
     </item>
+    
     <item>
       <title>NeRF and 3D Gaussian Splatting</title>
       <link>http://localhost:1313/projects/nerf-3dgs/</link>
       <pubDate>Tue, 02 Jan 2024 00:00:00 +0000</pubDate>
+      
       <guid>http://localhost:1313/projects/nerf-3dgs/</guid>
       <description>A research project comparing Neural Radiance Fields (NeRF) and 3D Gaussian Splatting for 3D scene reconstruction</description>
     </item>
+    
     <item>
       <title>Holiday Remainder</title>
       <link>http://localhost:1313/projects/holiday-remainder/</link>
       <pubDate>Mon, 01 Jan 2024 00:00:00 +0000</pubDate>
+      
       <guid>http://localhost:1313/projects/holiday-remainder/</guid>
       <description>A web application that allows us to view upcoming holidays and events</description>
     </item>
+    
   </channel>
 </rss>

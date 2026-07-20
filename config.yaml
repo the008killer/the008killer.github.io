@@ -1,6 +1,6 @@
 baseURL: "https://adhikariashwin0.com.np"
-languageCode: en-us 
-title: the008Ki11er 
+locale: en-us 
+title: the008Killer 
 theme: ["PaperMod"]
 
 taxonomies:

@@ -1,115 +1,184 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tags on the008Ki11er</title>
+    <title>Tags on the008Killer</title>
     <link>http://localhost:1313/tags/</link>
-    <description>Recent content in Tags on the008Ki11er</description>
-    <image>
-      <title>the008Ki11er</title>
-      <url>http://localhost:1313/papermod-cover.png</url>
-      <link>http://localhost:1313/papermod-cover.png</link>
-    </image>
-    <generator>Hugo -- 0.155.2</generator>
+    <description>Recent content in Tags on the008Killer</description>
+    <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 04 Jan 2024 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <lastBuildDate>Fri, 17 Jul 2026 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Flow Editor</title>
+      <link>http://localhost:1313/tags/flow-editor/</link>
+      <pubDate>Fri, 17 Jul 2026 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/tags/flow-editor/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Node-Red RCE</title>
+      <link>http://localhost:1313/tags/node-red-rce/</link>
+      <pubDate>Fri, 17 Jul 2026 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/tags/node-red-rce/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Omnictf</title>
+      <link>http://localhost:1313/tags/omnictf/</link>
+      <pubDate>Fri, 17 Jul 2026 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/tags/omnictf/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Omnictf Qualifiers</title>
+      <link>http://localhost:1313/tags/omnictf-qualifiers/</link>
+      <pubDate>Fri, 17 Jul 2026 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/tags/omnictf-qualifiers/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>OmniCTF2026</title>
+      <link>http://localhost:1313/tags/omnictf2026/</link>
+      <pubDate>Fri, 17 Jul 2026 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/tags/omnictf2026/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>Cryptography</title>
       <link>http://localhost:1313/tags/cryptography/</link>
       <pubDate>Thu, 04 Jan 2024 00:00:00 +0000</pubDate>
+      
       <guid>http://localhost:1313/tags/cryptography/</guid>
       <description></description>
     </item>
+    
     <item>
       <title>Cryptopals</title>
       <link>http://localhost:1313/tags/cryptopals/</link>
       <pubDate>Thu, 04 Jan 2024 00:00:00 +0000</pubDate>
+      
       <guid>http://localhost:1313/tags/cryptopals/</guid>
       <description></description>
     </item>
+    
     <item>
       <title>Scripts</title>
       <link>http://localhost:1313/tags/scripts/</link>
       <pubDate>Thu, 04 Jan 2024 00:00:00 +0000</pubDate>
+      
       <guid>http://localhost:1313/tags/scripts/</guid>
       <description></description>
     </item>
+    
     <item>
       <title>GSM</title>
       <link>http://localhost:1313/tags/gsm/</link>
       <pubDate>Wed, 03 Jan 2024 00:00:00 +0000</pubDate>
+      
       <guid>http://localhost:1313/tags/gsm/</guid>
       <description></description>
     </item>
+    
     <item>
       <title>IoT</title>
       <link>http://localhost:1313/tags/iot/</link>
       <pubDate>Wed, 03 Jan 2024 00:00:00 +0000</pubDate>
+      
       <guid>http://localhost:1313/tags/iot/</guid>
       <description></description>
     </item>
+    
     <item>
       <title>SMS</title>
       <link>http://localhost:1313/tags/sms/</link>
       <pubDate>Wed, 03 Jan 2024 00:00:00 +0000</pubDate>
+      
       <guid>http://localhost:1313/tags/sms/</guid>
       <description></description>
     </item>
+    
     <item>
       <title>Vehicle Tracking</title>
       <link>http://localhost:1313/tags/vehicle-tracking/</link>
       <pubDate>Wed, 03 Jan 2024 00:00:00 +0000</pubDate>
+      
       <guid>http://localhost:1313/tags/vehicle-tracking/</guid>
       <description></description>
     </item>
+    
     <item>
       <title>3D Scene</title>
       <link>http://localhost:1313/tags/3d-scene/</link>
       <pubDate>Tue, 02 Jan 2024 00:00:00 +0000</pubDate>
+      
       <guid>http://localhost:1313/tags/3d-scene/</guid>
       <description></description>
     </item>
+    
     <item>
       <title>3DGS</title>
       <link>http://localhost:1313/tags/3dgs/</link>
       <pubDate>Tue, 02 Jan 2024 00:00:00 +0000</pubDate>
+      
       <guid>http://localhost:1313/tags/3dgs/</guid>
       <description></description>
     </item>
+    
     <item>
       <title>Computer Vision</title>
       <link>http://localhost:1313/tags/computer-vision/</link>
       <pubDate>Tue, 02 Jan 2024 00:00:00 +0000</pubDate>
+      
       <guid>http://localhost:1313/tags/computer-vision/</guid>
       <description></description>
     </item>
+    
     <item>
       <title>Image Reconstruction</title>
       <link>http://localhost:1313/tags/image-reconstruction/</link>
       <pubDate>Tue, 02 Jan 2024 00:00:00 +0000</pubDate>
+      
       <guid>http://localhost:1313/tags/image-reconstruction/</guid>
       <description></description>
     </item>
+    
     <item>
       <title>NeRF</title>
       <link>http://localhost:1313/tags/nerf/</link>
       <pubDate>Tue, 02 Jan 2024 00:00:00 +0000</pubDate>
+      
       <guid>http://localhost:1313/tags/nerf/</guid>
       <description></description>
     </item>
+    
     <item>
       <title>Django</title>
       <link>http://localhost:1313/tags/django/</link>
       <pubDate>Mon, 01 Jan 2024 00:00:00 +0000</pubDate>
+      
       <guid>http://localhost:1313/tags/django/</guid>
       <description></description>
     </item>
+    
     <item>
       <title>React</title>
       <link>http://localhost:1313/tags/react/</link>
       <pubDate>Mon, 01 Jan 2024 00:00:00 +0000</pubDate>
+      
       <guid>http://localhost:1313/tags/react/</guid>
       <description></description>
     </item>
+    
   </channel>
 </rss>

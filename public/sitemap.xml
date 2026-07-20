@@ -2,19 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>http://localhost:1313/writeups/ctfs/</loc>
+    <lastmod>2026-07-17T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/writeups/ctfs/omnictf/</loc>
+    <lastmod>2026-07-17T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/writeups/hackthebox/conversor/</loc>
     <lastmod>2026-03-21T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/writeups/ctfs/</loc>
-    <lastmod>2026-03-03T00:00:00+00:00</lastmod>
+    <loc>http://localhost:1313/writeups/</loc>
+    <lastmod>2026-07-17T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/writeups/hackthebox/</loc>
     <lastmod>2026-05-30T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/writeups/hackthebox/interpreter/</loc>
-    <lastmod>2026-05-30T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/writeups/</loc>
     <lastmod>2026-05-30T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/writeups/hackthebox/pterodactyl/</loc>
@@ -37,8 +40,26 @@
     <loc>http://localhost:1313/projects/sms-vehicle-tracking/</loc>
     <lastmod>2024-01-03T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>http://localhost:1313/tags/flow-editor/</loc>
+    <lastmod>2026-07-17T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/node-red-rce/</loc>
+    <lastmod>2026-07-17T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/omnictf/</loc>
+    <lastmod>2026-07-17T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/omnictf-qualifiers/</loc>
+    <lastmod>2026-07-17T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/omnictf2026/</loc>
+    <lastmod>2026-07-17T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/</loc>
+    <lastmod>2026-07-17T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/</loc>
-    <lastmod>2026-05-30T00:00:00+00:00</lastmod>
+    <lastmod>2026-07-17T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/cryptography/</loc>
     <lastmod>2024-01-04T00:00:00+00:00</lastmod>
@@ -53,9 +74,6 @@
     <lastmod>2024-01-04T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/scripts/</loc>
-    <lastmod>2024-01-04T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/</loc>
     <lastmod>2024-01-04T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/gsm/</loc>
