@@ -1,0 +1,109 @@
+/* ==========================================
+   PaperMod Light Mode Code Block Contrast
+   ========================================== */
+
+/* Code block background and base text */
+body:not(.dark) .post-content .highlight,
+body:not(.dark) .post-content pre,
+body:not(.dark) .post-content pre code,
+body:not(.dark) .chroma {
+    background: #fff5f5 !important;
+    color: #24292e !important;
+}
+
+
+/* Keywords */
+body:not(.dark) .chroma .k,
+body:not(.dark) .chroma .kp,
+body:not(.dark) .chroma .kr {
+    color: #5b26be !important;
+}
+
+/* Keyword declarations / types */
+body:not(.dark) .chroma .kd,
+body:not(.dark) .chroma .kt {
+    color: #cf222e !important;
+}
+
+
+/* JSON keys / tags */
+body:not(.dark) .chroma .nt {
+    color: #0754b2 !important;
+    font-weight: 600;
+}
+
+
+/* Strings */
+body:not(.dark) .chroma .s,
+body:not(.dark) .chroma .s1,
+body:not(.dark) .chroma .s2 {
+    color: #04792b !important;
+}
+
+
+/* Functions */
+body:not(.dark) .chroma .nf,
+body:not(.dark) .chroma .fm {
+    color: #934107 !important;
+}
+
+
+/* Variables and names */
+body:not(.dark) .chroma .n,
+body:not(.dark) .chroma .nv,
+body:not(.dark) .chroma .vm,
+body:not(.dark) .chroma .bp {
+    color: #18331f !important;
+}
+
+
+/* Numbers */
+body:not(.dark) .chroma .m,
+body:not(.dark) .chroma .mi,
+body:not(.dark) .chroma .mf {
+    color: #0550ae !important;
+}
+
+
+/* Comments */
+body:not(.dark) .chroma .c,
+body:not(.dark) .chroma .c1,
+body:not(.dark) .chroma .cm {
+    color: #6e7781 !important;
+    font-style: italic;
+}
+
+
+/* Operators and punctuation */
+body:not(.dark) .chroma .o,
+body:not(.dark) .chroma .p {
+    color: #24292e !important;
+}
+
+/* Builtins (echo, print, len, etc.) */
+body:not(.dark) .chroma .nb,
+body:not(.dark) .chroma .bp {
+    color: #0550ae !important;
+}
+
+/* Other names (window, document, tarfile, io, etc.) */
+body:not(.dark) .chroma .nx,
+body:not(.dark) .chroma .nn {
+    color: #da6505 !important;
+}
+
+/* HTML/XML attributes (type, disabled, class, href, etc.) */
+body:not(.dark) .chroma .na {
+    color: #8250df !important;
+}
+
+/* Constants (true, false, null, disabled in some lexers) */
+body:not(.dark) .chroma .kc,
+body:not(.dark) .chroma .no {
+    color: #e80817 !important;
+}
+
+/* Property names */
+body:not(.dark) .chroma .py {
+    color: #0550ae !important;
+}
