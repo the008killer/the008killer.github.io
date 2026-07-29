@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Lactf on the008Killer</title>
+    <link>http://localhost:1313/tags/lactf/</link>
+    <description>Recent content in Lactf on the008Killer</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    
+    
+    <lastBuildDate>Wed, 11 Feb 2026 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/lactf/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>LACTF CTF 2026</title>
+      <link>http://localhost:1313/writeups/ctfs/lactf2026/</link>
+      <pubDate>Wed, 11 Feb 2026 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/writeups/ctfs/lactf2026/</guid>
+      <description>&lt;h2 id=&#34;webblogler&#34;&gt;Web/Blogler&lt;/h2&gt;&#xA;&lt;p&gt;&lt;img alt=&#34;web-blogler&#34; loading=&#34;lazy&#34; src=&#34;http://localhost:1313/writeups/ctfs/lactf2026/assets/blogler.png&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;There was a login and register page and after registering a user we get into this web page where we have config editor which seems to take in yaml configuration and another upload blog section.&lt;/p&gt;&#xA;&lt;p&gt;&lt;img alt=&#34;web page&#34; loading=&#34;lazy&#34; src=&#34;http://localhost:1313/writeups/ctfs/lactf2026/assets/blogler_web.png&#34;&gt;&lt;/p&gt;&#xA;&lt;h3 id=&#34;analysing-the-contents-of-bloglerzip&#34;&gt;Analysing the contents of blogler.zip&lt;/h3&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;.&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;├── app.py&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;├── Dockerfile&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;├── static&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;│   ├── main.js&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;│   └── style.css&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;└── templates&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    ├── blog.html&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    ├── index.html&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    └── login.html&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The core vulnerability in this challenge lies in a logic flaw within the &lt;code&gt;validate_conf&lt;/code&gt; function combined with the behavior of the &lt;code&gt;display_name&lt;/code&gt; function and &lt;em&gt;&lt;strong&gt;YAML anchors&lt;/strong&gt;&lt;/em&gt;.&#xA;&lt;img alt=&#34;Blogler bug&#34; loading=&#34;lazy&#34; src=&#34;http://localhost:1313/writeups/ctfs/lactf2026/assets/blogler_bug.png&#34;&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

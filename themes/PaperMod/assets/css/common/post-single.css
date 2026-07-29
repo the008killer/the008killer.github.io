@@ -80,8 +80,8 @@
 .post-meta .i18n_list li a,
 .toc a:hover {
     box-shadow: 0 1px 0;
-    box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
 }
 
 .post-content a code {
@@ -275,6 +275,7 @@
 .toc details summary {
     cursor: zoom-in;
     margin-inline-start: 10px;
+    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -368,6 +369,7 @@ h6:hover .anchor {
     color: var(--secondary);
     margin-inline-start: 8px;
     font-weight: 500;
+    -webkit-user-select: none;
     user-select: none;
 }
 

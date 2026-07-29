@@ -61,6 +61,69 @@
     <loc>http://localhost:1313/</loc>
     <lastmod>2026-07-17T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>http://localhost:1313/tags/cve-2023-43208/</loc>
+    <lastmod>2026-05-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/eval-injection/</loc>
+    <lastmod>2026-05-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/htb/</loc>
+    <lastmod>2026-05-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/linux/</loc>
+    <lastmod>2026-05-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/mirthconnect/</loc>
+    <lastmod>2026-05-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/pbkdf2-hash/</loc>
+    <lastmod>2026-05-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/pbkdf2-hmac-sha256/</loc>
+    <lastmod>2026-05-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/cve-2025-49132/</loc>
+    <lastmod>2026-05-18T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/cve-2025-6018/</loc>
+    <lastmod>2026-05-18T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/cve-2025-6019/</loc>
+    <lastmod>2026-05-18T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/lpe-chains/</loc>
+    <lastmod>2026-05-18T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/udisks/</loc>
+    <lastmod>2026-05-18T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/xlst-injection/</loc>
+    <lastmod>2026-03-21T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/cve-2025-32463/</loc>
+    <lastmod>2026-03-09T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/ehax/</loc>
+    <lastmod>2026-03-03T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/ehaxctf/</loc>
+    <lastmod>2026-03-03T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/forensics/</loc>
+    <lastmod>2026-03-03T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/lactf/</loc>
+    <lastmod>2026-02-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/lactf2026/</loc>
+    <lastmod>2026-02-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/pascalctf/</loc>
+    <lastmod>2026-02-03T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/web/</loc>
+    <lastmod>2026-02-03T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/tags/cryptography/</loc>
     <lastmod>2024-01-04T00:00:00+00:00</lastmod>
   </url><url>

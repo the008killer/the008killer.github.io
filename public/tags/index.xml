@@ -55,6 +55,195 @@
     </item>
     
     <item>
+      <title>CVE-2023-43208</title>
+      <link>http://localhost:1313/tags/cve-2023-43208/</link>
+      <pubDate>Sat, 30 May 2026 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/tags/cve-2023-43208/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Eval Injection</title>
+      <link>http://localhost:1313/tags/eval-injection/</link>
+      <pubDate>Sat, 30 May 2026 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/tags/eval-injection/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>HTB</title>
+      <link>http://localhost:1313/tags/htb/</link>
+      <pubDate>Sat, 30 May 2026 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/tags/htb/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Linux</title>
+      <link>http://localhost:1313/tags/linux/</link>
+      <pubDate>Sat, 30 May 2026 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/tags/linux/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>MirthConnect</title>
+      <link>http://localhost:1313/tags/mirthconnect/</link>
+      <pubDate>Sat, 30 May 2026 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/tags/mirthconnect/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>PBKDF2 Hash</title>
+      <link>http://localhost:1313/tags/pbkdf2-hash/</link>
+      <pubDate>Sat, 30 May 2026 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/tags/pbkdf2-hash/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>PBKDF2-HMAC-SHA256</title>
+      <link>http://localhost:1313/tags/pbkdf2-hmac-sha256/</link>
+      <pubDate>Sat, 30 May 2026 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/tags/pbkdf2-hmac-sha256/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>CVE-2025-49132</title>
+      <link>http://localhost:1313/tags/cve-2025-49132/</link>
+      <pubDate>Mon, 18 May 2026 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/tags/cve-2025-49132/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>CVE-2025-6018</title>
+      <link>http://localhost:1313/tags/cve-2025-6018/</link>
+      <pubDate>Mon, 18 May 2026 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/tags/cve-2025-6018/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>CVE-2025-6019</title>
+      <link>http://localhost:1313/tags/cve-2025-6019/</link>
+      <pubDate>Mon, 18 May 2026 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/tags/cve-2025-6019/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>LPE Chains</title>
+      <link>http://localhost:1313/tags/lpe-chains/</link>
+      <pubDate>Mon, 18 May 2026 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/tags/lpe-chains/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Udisks</title>
+      <link>http://localhost:1313/tags/udisks/</link>
+      <pubDate>Mon, 18 May 2026 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/tags/udisks/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>XLST Injection</title>
+      <link>http://localhost:1313/tags/xlst-injection/</link>
+      <pubDate>Sat, 21 Mar 2026 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/tags/xlst-injection/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>CVE-2025-32463</title>
+      <link>http://localhost:1313/tags/cve-2025-32463/</link>
+      <pubDate>Mon, 09 Mar 2026 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/tags/cve-2025-32463/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ehax</title>
+      <link>http://localhost:1313/tags/ehax/</link>
+      <pubDate>Tue, 03 Mar 2026 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/tags/ehax/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ehaxctf</title>
+      <link>http://localhost:1313/tags/ehaxctf/</link>
+      <pubDate>Tue, 03 Mar 2026 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/tags/ehaxctf/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Forensics</title>
+      <link>http://localhost:1313/tags/forensics/</link>
+      <pubDate>Tue, 03 Mar 2026 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/tags/forensics/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Lactf</title>
+      <link>http://localhost:1313/tags/lactf/</link>
+      <pubDate>Wed, 11 Feb 2026 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/tags/lactf/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Lactf2026</title>
+      <link>http://localhost:1313/tags/lactf2026/</link>
+      <pubDate>Wed, 11 Feb 2026 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/tags/lactf2026/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>PascalCTF</title>
+      <link>http://localhost:1313/tags/pascalctf/</link>
+      <pubDate>Tue, 03 Feb 2026 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/tags/pascalctf/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Web</title>
+      <link>http://localhost:1313/tags/web/</link>
+      <pubDate>Tue, 03 Feb 2026 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/tags/web/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Cryptography</title>
       <link>http://localhost:1313/tags/cryptography/</link>
       <pubDate>Thu, 04 Jan 2024 00:00:00 +0000</pubDate>
