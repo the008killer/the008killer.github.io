@@ -8,7 +8,7 @@
     <language>en-us</language>
     
     
-    <lastBuildDate>Fri, 17 Jul 2026 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/writeups/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/writeups/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>CTF</title>
       <link>http://localhost:1313/writeups/ctfs/</link>
@@ -21,7 +21,7 @@
     <item>
       <title>HackTheBox</title>
       <link>http://localhost:1313/writeups/hackthebox/</link>
-      <pubDate>Sat, 30 May 2026 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
       
       <guid>http://localhost:1313/writeups/hackthebox/</guid>
       <description>Hack The Box (HTB) is an online platform that provides hands-on cybersecurity training through real-world penetration testing challenges. It offers a variety of machines and challenges for users to test and improve their ethical hacking skills.</description>

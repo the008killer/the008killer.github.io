@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>MCP on the008Killer</title>
+    <link>http://localhost:1313/tags/mcp/</link>
+    <description>Recent content in MCP on the008Killer</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    
+    
+    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/mcp/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HTB-Kobold</title>
+      <link>http://localhost:1313/writeups/hackthebox/kobold/</link>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/writeups/hackthebox/kobold/</guid>
+      <description>&lt;h2 id=&#34;overview&#34;&gt;Overview&lt;/h2&gt;&#xA;&lt;table style=&#34;width:100%; table-layout:fixed;&#34;&gt;&#xD;&#xA;  &lt;thead&gt;&#xD;&#xA;    &lt;tr&gt;&#xD;&#xA;      &lt;th style=&#34;width:40%; text-align:left;&#34;&gt;Category&lt;/th&gt;&#xD;&#xA;      &lt;th style=&#34;width:60%; text-align:left;&#34;&gt;Info&lt;/th&gt;&#xD;&#xA;    &lt;/tr&gt;&#xD;&#xA;  &lt;/thead&gt;&#xD;&#xA;  &lt;tbody&gt;&#xD;&#xA;    &lt;tr&gt;&lt;td&gt;Machine Name&lt;/td&gt;&lt;td&gt;Kobold&lt;/td&gt;&lt;/tr&gt;&#xD;&#xA;    &lt;tr&gt;&lt;td&gt;Difficulty&lt;/td&gt;&lt;td&gt;Easy&lt;/td&gt;&lt;/tr&gt;&#xD;&#xA;    &lt;tr&gt;&lt;td&gt;Release Date&lt;/td&gt;&lt;td&gt;21 March, 2026&lt;/td&gt;&lt;/tr&gt;&#xD;&#xA;    &lt;tr&gt;&lt;td&gt;Author&lt;/td&gt;&lt;td&gt;sau123&lt;/td&gt;&lt;/tr&gt;&#xD;&#xA;    &lt;tr&gt;&lt;td&gt;OS&lt;/td&gt;&lt;td&gt;Linux&lt;/td&gt;&lt;/tr&gt;&#xD;&#xA;    &lt;tr&gt;&lt;td&gt;Pwned Date&lt;/td&gt;&lt;td&gt;25 March, 2026&lt;/td&gt;&lt;/tr&gt;&#xD;&#xA;  &lt;/tbody&gt;&#xD;&#xA;&lt;/table&gt;&#xD;&#xA;&lt;h2 id=&#34;reconnaissance&#34;&gt;Reconnaissance&lt;/h2&gt;&#xA;&lt;h3 id=&#34;port-scan&#34;&gt;Port Scan&lt;/h3&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;22/tcp   — OpenSSH 9.6p1&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;80/tcp   — nginx (redirects to HTTPS)&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;443/tcp  — nginx + TLS (kobold.htb)&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;3552/tcp — Golang HTTP server (public)&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;subdomain-enumeration&#34;&gt;Subdomain Enumeration&lt;/h3&gt;&#xA;&lt;p&gt;Virtual host enumeration reveals two subdomains:&lt;/p&gt;&#xA;&lt;table&gt;&#xA;&#x9;&lt;thead&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;Subdomain&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;Service&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/thead&gt;&#xA;&#x9;&lt;tbody&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;&lt;code&gt;mcp.kobold.htb&lt;/code&gt;&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;MCPJam (MCP server)&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;&lt;code&gt;bin.kobold.htb&lt;/code&gt;&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;PrivateBin (reverse proxied to Docker container on 127.0.0.1:8080)&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;what-is-mcpjam&#34;&gt;What is MCPJam?&lt;/h2&gt;&#xA;&lt;p&gt;MCPJam is an open-source &lt;strong&gt;Model Context Protocol (MCP)&lt;/strong&gt; server. MCP is a protocol that allows AI assistants to connect to external tools and data sources. MCPJam acts as a bridge — it accepts a configuration from a client and spawns a local process that speaks the MCP JSON-RPC protocol over stdio.&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -11,11 +11,14 @@
     <loc>http://localhost:1313/writeups/hackthebox/conversor/</loc>
     <lastmod>2026-03-21T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/writeups/</loc>
-    <lastmod>2026-07-17T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>http://localhost:1313/writeups/hackthebox/</loc>
-    <lastmod>2026-05-30T00:00:00+00:00</lastmod>
+    <lastmod>2026-08-02T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/writeups/hackthebox/kobold/</loc>
+    <lastmod>2026-08-02T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/writeups/</loc>
+    <lastmod>2026-08-02T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/writeups/hackthebox/interpreter/</loc>
     <lastmod>2026-05-30T00:00:00+00:00</lastmod>
@@ -40,6 +43,27 @@
     <loc>http://localhost:1313/projects/sms-vehicle-tracking/</loc>
     <lastmod>2024-01-03T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>http://localhost:1313/tags/cve-2026-23744/</loc>
+    <lastmod>2026-08-02T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/docker-escape/</loc>
+    <lastmod>2026-08-02T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/mcp/</loc>
+    <lastmod>2026-08-02T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/privatebin/</loc>
+    <lastmod>2026-08-02T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/rce/</loc>
+    <lastmod>2026-08-02T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/</loc>
+    <lastmod>2026-08-02T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/</loc>
+    <lastmod>2026-08-02T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/tags/flow-editor/</loc>
     <lastmod>2026-07-17T00:00:00+00:00</lastmod>
   </url><url>
@@ -53,12 +77,6 @@
     <lastmod>2026-07-17T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/omnictf2026/</loc>
-    <lastmod>2026-07-17T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/</loc>
-    <lastmod>2026-07-17T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/</loc>
     <lastmod>2026-07-17T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/cve-2023-43208/</loc>
